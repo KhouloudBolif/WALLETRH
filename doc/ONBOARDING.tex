@@ -1,0 +1,434 @@
+% !TEX program = pdflatex
+% Guide de prise en main - Portail RH Documents
+% Compile: pdflatex ONBOARDING.tex
+\documentclass[10.5pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage{microtype}
+\usepackage{mathpazo}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{courier}
+\renewcommand{\familydefault}{\rmdefault}
+
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{colortbl}
+\usepackage{ragged2e}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{tikz}
+\usepackage[explicit]{titlesec}
+\usepackage{fancyhdr}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{
+  pdftitle={Guide de prise en main : Portail RH Documents},
+  pdfauthor={Abdellah Raissouni},
+}
+
+\geometry{top=1.8cm, bottom=1.8cm, left=2.2cm, right=2.2cm,
+          headheight=13pt, headsep=14pt}
+
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+\tolerance=2000
+\emergencystretch=2em
+\AtBeginDocument{\sloppy}
+
+% Brand palette
+\definecolor{BrandCharcoal}{HTML}{2B2826}
+\definecolor{BrandRed}{HTML}{B83232}
+\definecolor{BrandRedSoft}{HTML}{F9EDED}
+\definecolor{BrandMuted}{HTML}{6B6560}
+\definecolor{BrandBorder}{HTML}{E8E4DF}
+\definecolor{BrandBgSoft}{HTML}{FAF9F7}
+\definecolor{InfoBlue}{HTML}{1E5082}
+\definecolor{InfoBlueSoft}{HTML}{EDF4FA}
+\definecolor{CheckGreen}{HTML}{2D6A4F}
+\definecolor{CheckGreenSoft}{HTML}{EDF7F2}
+
+\newcommand{\AuthorName}{Abdellah Raissouni}
+
+% Section styling
+\newcommand{\sectionaccent}{\textcolor{BrandRed}{\rule{2.5pt}{1.0em}}}
+
+\titleformat{\section}
+  {\fontfamily{phv}\fontseries{b}\selectfont\large\color{BrandCharcoal}}
+  {\sectionaccent\hspace{0.55em}\thesection}{0.6em}{#1}
+  [\vspace{0.1em}\noindent{\color{BrandBorder}\rule{\textwidth}{0.6pt}}\vspace{0.3em}]
+\titlespacing*{\section}{0pt}{1.2em}{0.6em}
+
+\titleformat{\subsection}
+  {\fontfamily{phv}\fontseries{b}\selectfont\normalsize\color{BrandCharcoal}}
+  {\thesubsection}{0.5em}{#1}
+\titlespacing*{\subsection}{0pt}{0.8em}{0.4em}
+
+% Header / footer
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyhead[L]{\small\fontfamily{phv}\selectfont\color{BrandMuted}Portail RH Documents}
+\fancyhead[R]{\small\fontfamily{phv}\selectfont\color{BrandMuted}Guide de prise en main (v1.0)}
+\fancyfoot[C]{\small\fontfamily{phv}\selectfont\color{BrandMuted}\thepage}
+\fancypagestyle{plain}{\fancyhf{}\renewcommand{\headrulewidth}{0pt}%
+  \fancyfoot[C]{\small\fontfamily{phv}\selectfont\color{BrandMuted}\thepage}}
+
+% Callout boxes
+\makeatletter
+\newsavebox{\calloutbox}
+\newlength{\calloutinnerwidth}
+\newcommand{\calloutstart}[2]{%
+  \par\medskip\noindent\def\callout@accent{#1}\def\callout@bg{#2}%
+  \setlength{\calloutinnerwidth}{\dimexpr\textwidth-28pt\relax}%
+  \begin{lrbox}{\calloutbox}\begin{minipage}{\calloutinnerwidth}%
+  \RaggedRight
+  {\fontfamily{phv}\fontseries{b}\selectfont\color{BrandCharcoal}\callout@title}\par\vspace{0.4em}%
+}
+\newcommand{\calloutend}{%
+  \end{minipage}\end{lrbox}%
+  \noindent\begin{tikzpicture}[baseline=(box.base)]%
+    \node[fill=\callout@bg, rounded corners=2.5mm, inner xsep=13pt, inner ysep=10pt,
+          text width=\calloutinnerwidth, align=left] (box) {\usebox{\calloutbox}};%
+    \fill[\callout@accent] (box.south west) rectangle ([xshift=4pt]box.south west |- box.north east);%
+  \end{tikzpicture}\par\medskip
+}
+\newenvironment{infobox}[1]{\def\callout@title{#1}\calloutstart{InfoBlue}{InfoBlueSoft}}{\calloutend}
+\newenvironment{warnbox}[1]{\def\callout@title{#1}\calloutstart{BrandRed}{BrandRedSoft}}{\calloutend}
+\newenvironment{checkboxbox}[1]{\def\callout@title{#1}\calloutstart{CheckGreen}{CheckGreenSoft}}{\calloutend}
+\makeatother
+
+% Helpers
+\lstdefinestyle{envblock}{
+  basicstyle=\ttfamily\small, breaklines=true, frame=single, framerule=0.4pt,
+  rulecolor=\color{BrandBorder}, backgroundcolor=\color{BrandBgSoft},
+  xleftmargin=0.5em, columns=fullflexible, keepspaces=true,
+  aboveskip=0.6em, belowskip=0.4em,
+}
+\lstset{style=envblock}
+
+\newcommand{\checkbox}{\tikz[baseline=-0.55ex]{\draw[BrandMuted, line width=0.5pt] (0,0) rectangle (0.52em,0.52em);}}
+\newcommand{\mono}[1]{{\ttfamily\nolinkurl{#1}}}
+% Bold, brand-colored table header label -- same font family as body text
+% (Palatino) so row heights stay consistent between columns; do NOT switch
+% \fontfamily per column in a tabularx preamble, it desyncs row baselines
+% between columns when combined with \arraystretch.
+\newcommand{\tablabel}[1]{\textbf{\textcolor{BrandCharcoal}{#1}}}
+\renewcommand{\arraystretch}{1.3}
+\setlength{\tabcolsep}{7pt}
+
+% Cover strip
+\newcommand{\makecover}{%
+  \thispagestyle{empty}
+  \begin{tikzpicture}[remember picture, overlay]
+    \fill[BrandCharcoal] (current page.north west)
+      rectangle ([yshift=-4.2cm]current page.north east);
+    \fill[BrandRed]
+      ([xshift=-1.6cm,yshift=-4.2cm]current page.north east)
+      -- ([xshift=-1.6cm,yshift=-2.4cm]current page.north east)
+      -- ([xshift=0cm,  yshift=-4.2cm]current page.north east)
+      -- cycle;
+    \node[anchor=north west, xshift=2.2cm, yshift=-1.1cm]
+      at (current page.north west) {%
+      \begin{minipage}{0.75\textwidth}
+        {\fontfamily{phv}\fontseries{b}\selectfont\color{white}\fontsize{8}{10}\selectfont
+          \MakeUppercase{Amendis / Veolia, Service RH}}\\[0.65em]
+        {\fontfamily{phv}\fontseries{b}\selectfont\color{white}\fontsize{22}{26}\selectfont
+          Portail RH Documents}\\[0.25em]
+        {\fontfamily{phv}\selectfont\color{white!80}\fontsize{12}{16}\selectfont
+          Guide de prise en main pour nouvel ingénieur}\\[0.7em]
+        {\color{white!65}\fontsize{9.5}{13}\selectfont
+          Contexte, fonctionnalités, état d'avancement et démarrage rapide}
+      \end{minipage}};
+    \node[anchor=south east, xshift=-2.2cm, yshift=1.0cm]
+      at (current page.south east) {%
+      \begin{minipage}{0.38\textwidth}
+        \raggedleft
+        {\fontfamily{phv}\selectfont\color{BrandMuted}\small Juillet 2026, version 1.0}\\[0.15em]
+        {\fontfamily{phv}\selectfont\color{BrandMuted}\small Contact : \textbf{\AuthorName}}
+      \end{minipage}};
+  \end{tikzpicture}
+  \vspace*{4.6cm}
+}
+
+% =============================================================================
+\begin{document}
+\makecover
+
+\begin{infobox}{Objet de ce document}
+  Ce document vous donne une vue d'ensemble du projet avant de plonger dans le
+  code : ce qu'il fait, ce qui est déjà construit, la stack technique, comment
+  lancer le projet en local, et où trouver le reste de la documentation. Pour
+  le détail technique complet (architecture, API, modèle de données,
+  conventions), la référence vivante est \mono{doc/TECHNICAL.md}. Lisez-le en
+  premier une fois cette vue d'ensemble digérée.
+\end{infobox}
+
+{\hypersetup{linkcolor=BrandCharcoal}\tableofcontents}
+
+% -----------------------------------------------------------------------------
+\section{Vue d'ensemble}
+\label{sec:overview}
+
+Le \textbf{Portail RH Documents} est une application web interne qui donne aux
+équipes RH un accès contrôlé aux documents des salariés stockés sur
+\textbf{Google Drive}, sans que les agents aient à fouiller manuellement dans
+l'arborescence Drive, et sans leur donner un accès plus large que ce dont ils
+ont besoin.
+
+\medskip
+\textbf{Principe d'architecture central :}
+
+\begin{tabularx}{\textwidth}{@{}p{0.28\textwidth}X@{}}
+\toprule
+\tablabel{Couche} & \tablabel{Rôle} \\
+\midrule
+Google Drive & Stockage des fichiers. Reste la source de vérité, les PDF n'y sont jamais copiés ailleurs. \\[0.4em]
+PostgreSQL & Index des métadonnées, des utilisateurs et des permissions. C'est sur cette base que la recherche s'exécute, jamais sur Drive en direct. \\[0.4em]
+Application Next.js & Authentification, contrôle d'accès, recherche, interface RH/admin. \\
+\bottomrule
+\end{tabularx}
+
+\medskip
+Un document refusé à un utilisateur apparaît dans l'interface \textbf{grisé, sans
+lien}. Il n'est jamais masqué en front uniquement : l'accès est toujours vérifié
+côté serveur.
+
+% -----------------------------------------------------------------------------
+\section{Fonctionnalités principales}
+
+\begin{itemize}[leftmargin=1.4em, itemsep=0.3em, topsep=0.3em]
+  \item \textbf{Authentification et comptes} : login, mot de passe oublié, gestion des utilisateurs et des rôles (\mono{ADMIN}, \mono{RH\_MANAGER}, \mono{RH\_AGENT})
+  \item \textbf{Recherche documentaire avancée} : recherche plein texte sur toutes les colonnes de la feuille Base (CIN, diplôme, zone, responsable, etc.), filtres par identité, organisation, dates, avec export \textbf{Excel} et export \textbf{ZIP} (arborescence par salarié/catégorie) des résultats
+  \item \textbf{Annuaire et dossier salarié} : fiche par matricule avec état civil, documents indexés et liens Drive (si autorisé)
+  \item \textbf{Complétude des dossiers} : checklist par salarié des types de documents attendus vs indexés, avec un mécanisme d'attestation manuelle pour les cas non résolubles automatiquement
+  \item \textbf{Reporting} : tableau de bord démographie de l'effectif et vue d'ensemble de la complétude
+  \item \textbf{Permissions granulaires} : matrice par rôle/utilisateur × catégorie de dossier, plus une portée par salarié (direction/service)
+  \item \textbf{Synchronisation Drive} : un Google Apps Script pousse l'arborescence Drive vers le portail. \textbf{Le portail n'appelle jamais l'API Drive lui-même} (voir §\ref{sec:drivesync})
+  \item \textbf{Sécurité} : mots de passe chiffrés, limitation de débit, en-têtes de sécurité, webhooks signés HMAC
+\end{itemize}
+
+% -----------------------------------------------------------------------------
+\section{Stack technique}
+
+\rowcolors{2}{BrandBgSoft}{white}
+\begin{tabularx}{\textwidth}{@{}p{0.26\textwidth}X@{}}
+\toprule
+\rowcolor{white}
+\tablabel{Couche} & \tablabel{Choix} \\
+\midrule
+Framework & Next.js 16 (App Router, Turbopack) \\
+Langage & TypeScript \\
+UI & Tailwind CSS v4, Shadcn/ui, Framer Motion \\
+Formulaires & react-hook-form + zod \\
+Auth & NextAuth.js v5 (Credentials, JWT) \\
+Base de données & PostgreSQL 16+, Prisma 7 \\
+Email & Nodemailer (reset password ; Ethereal en dev) \\
+Synchronisation Drive & Google Apps Script (push vers le portail, aucune API Drive côté serveur) \\
+Graphiques & recharts (page reporting) \\
+\bottomrule
+\end{tabularx}
+
+% -----------------------------------------------------------------------------
+\section{État d'avancement}
+
+\begin{checkboxbox}{Ce qui est déjà construit}
+\begin{tabular}{@{}lp{0.74\textwidth}@{}}
+\checkbox & Authentification, gestion des comptes, paramètres utilisateur \\
+\checkbox & Synchronisation Drive réelle via Google Apps Script (webhook signé, testée de bout en bout) \\
+\checkbox & Recherche documentaire avancée avec exports Excel et ZIP \\
+\checkbox & Annuaire, dossier salarié, complétude des dossiers avec attestations manuelles \\
+\checkbox & Reporting : démographie de l'effectif et vue de complétude \\
+\checkbox & Permissions : matrice par rôle/utilisateur et portée par salarié (direction/service) \\
+\checkbox & Sécurité : chiffrement, limitation de débit, en-têtes, webhooks HMAC \\
+\end{tabular}
+\end{checkboxbox}
+
+% -----------------------------------------------------------------------------
+\section{Démarrage rapide}
+\label{sec:quickstart}
+
+\begin{enumerate}[leftmargin=1.5em, itemsep=0.3em, topsep=0.2em]
+  \item \textbf{Prérequis} : Node.js \textbf{20.9+}, PostgreSQL \textbf{16+} accessible localement, npm.
+  \item Cloner le dépôt et installer les dépendances :
+\begin{lstlisting}
+git clone <url-du-depot>
+cd projet-rh-annexe
+npm install
+\end{lstlisting}
+  \item Copier \mono{.env.example} vers \mono{.env} et renseigner au minimum
+    \mono{DATABASE\_URL} et \mono{AUTH\_SECRET} (\mono{openssl rand -base64 32}).
+    Les variables SMTP et synchronisation Drive peuvent rester vides en local.
+  \item Appliquer le schéma Prisma à la base et créer le compte admin :
+\begin{lstlisting}
+npm run db:setup
+\end{lstlisting}
+    Sortie réelle observée (schéma déjà à jour, seed idempotent, peut être
+    relancé sans risque) :
+\begin{lstlisting}[backgroundcolor=\color{BrandCharcoal}, basicstyle=\ttfamily\small\color{white}, rulecolor=\color{BrandCharcoal}]
+> projet-rh-annexe@0.1.0 db:setup
+> prisma db push && tsx prisma/seed.ts
+
+Loaded Prisma config from prisma.config.ts.
+Prisma schema loaded from prisma\schema.prisma.
+Datasource "db": PostgreSQL database "rh_annexe", schema "public" at "localhost:5433"
+
+The database is already in sync with the Prisma schema.
+
+Seed OK -- admin@amendis.ma / Admin123!
+\end{lstlisting}
+  \item Lancer le serveur de développement :
+\begin{lstlisting}
+npm run dev
+\end{lstlisting}
+  \item Ouvrir \mono{http://localhost:3000}. Connexion :
+    \mono{admin@amendis.ma} / \mono{Admin123!}
+\end{enumerate}
+
+\begin{infobox}{Piège fréquent en local}
+  Sur certaines machines Windows avec PostgreSQL 18, l'instance locale tourne
+  sur le port \textbf{5433} et non le 5432 par défaut. À vérifier avant de
+  chercher une erreur de connexion ailleurs (remarquez le port 5433 dans la
+  sortie ci-dessus).
+\end{infobox}
+
+Pour ce qu'il faut fournir côté IT pour une mise en production (hébergement,
+base de données, SMTP, variables d'environnement), voir
+\mono{doc/DEPLOYMENT.md}.
+
+% -----------------------------------------------------------------------------
+\section{Configurer la synchronisation Drive (Google Apps Script)}
+\label{sec:drivesync}
+
+Cette étape n'est \textbf{pas nécessaire pour développer en local} (le point
+précédent suffit pour lancer le portail avec une base vide ou déjà peuplée).
+Elle concerne la connexion à un vrai Google Drive RH. Référence complète :
+\mono{doc/APPS\_SCRIPT\_SYNC\_SETUP.md} ; script source :
+\mono{scripts/apps-script/sync.gs} dans le dépôt.
+
+\begin{warnbox}{Aucune API Drive, aucun compte de service}
+  Le portail ne détient \textbf{aucune} clé Google, ni compte de service, ni
+  client OAuth. Un Google Apps Script (un script qui s'exécute \emph{dans}
+  Google, sous l'identité Workspace de l'entreprise) lit le Drive et pousse
+  les données vers le portail. Le portail ne fait jamais l'inverse, sauf pour
+  l'export ZIP (voir \mono{doc/TECHNICAL.md} §9).
+\end{warnbox}
+
+\begin{enumerate}[leftmargin=1.5em, itemsep=0.4em, topsep=0.3em]
+  \item \textbf{Localiser le script.} Le code à déployer est dans le dépôt :
+    \mono{scripts/apps-script/sync.gs}. Ce fichier n'est \textbf{pas} exécuté
+    par Next.js : c'est un fichier source à copier manuellement dans un
+    projet Google Apps Script.
+  \item \textbf{Créer le projet Apps Script.} Depuis un compte Google
+    Workspace de l'entreprise, aller sur \mono{script.google.com} et créer un
+    nouveau projet. Plus simple : ouvrir la feuille « Base » (feuille
+    Excel/Sheets contenant les salariés) et utiliser
+    \mono{Extensions > Apps Script}, ce qui lie automatiquement le script à
+    cette feuille.
+  \item \textbf{Coller le code.} Copier tout le contenu de
+    \mono{scripts/apps-script/sync.gs} dans l'éditeur Apps Script (remplacer
+    le fichier \mono{Code.gs} par défaut).
+  \item \textbf{Renseigner les propriétés du script.} Dans l'éditeur :
+    \mono{Paramètres du projet (icône engrenage) > Propriétés du script >
+    Ajouter une propriété du script}. Ajouter les quatre valeurs suivantes :
+\begin{lstlisting}
+PORTAL_WEBHOOK_URL  = https://<votre-domaine>/api/sync/apps-script
+SYNC_SECRET         = <valeur longue aleatoire, ex. openssl rand -base64 32>
+ROOT_FOLDER_ID      = <ID du dossier Drive racine, un sous-dossier par matricule>
+BASE_SHEET_ID       = <ID de la feuille "Base" (salaries)>
+\end{lstlisting}
+    L'ID d'un dossier ou d'une feuille Google est la partie de l'URL après
+    \mono{/folders/} ou \mono{/d/}.
+  \item \textbf{Synchroniser le secret côté portail.} La variable
+    d'environnement \mono{DRIVE\_SYNC\_WEBHOOK\_SECRET} du portail doit être
+    \textbf{exactement égale} à \mono{SYNC\_SECRET} ci-dessus. Utiliser une
+    valeur différente par environnement (dev, staging, prod) : ne jamais
+    réutiliser le même secret.
+  \item \textbf{Principe du moindre privilège.} Exécuter le script sous un
+    compte Workspace qui n'a accès qu'au dossier racine RH et à la feuille
+    Base, pas un accès Drive global à tout le domaine.
+  \item \textbf{Tester manuellement.} La fonction \mono{testRunSyncManually}
+    est fournie dans le script pour lancer une synchronisation à la demande
+    depuis l'éditeur (bouton « Exécuter »), avant de programmer le
+    déclencheur automatique.
+  \item \textbf{Programmer le déclencheur.} Dans l'éditeur Apps Script :
+    \mono{Déclencheurs (icône horloge) > Ajouter un déclencheur}, fonction
+    \mono{runSync}, type d'événement \mono{Basé sur le temps}, fréquence
+    \mono{Toutes les 30 minutes} (ajustable). C'est ce déclencheur, pas un
+    bouton dans le portail, qui lance les synchronisations en production.
+    L'interface \mono{/admin/sync} du portail est en lecture seule.
+\end{enumerate}
+
+\begin{infobox}{Pièges déjà rencontrés en test réel}
+  Voir \mono{doc/APPS\_SCRIPT\_SYNC\_SETUP.md} pour le détail, notamment : un
+  nom d'onglet \mono{"Base "} avec un espace final fait échouer
+  \mono{getSheetByName("Base")} silencieusement ; la ligne 1 de la feuille
+  Base doit être vide, les en-têtes en ligne 2 ; et la signature HMAC doit
+  être calculée en UTF-8 explicite pour ne pas échouer sur les caractères
+  accentués (\mono{Prénom}, \mono{Date d'Entrée}, etc.).
+\end{infobox}
+
+% -----------------------------------------------------------------------------
+\section{Les branches}
+\label{sec:branches}
+
+Le développement se fait sur des branches de fonctionnalité fusionnées dans
+\mono{main} une fois stabilisées.
+
+\medskip
+\begin{infobox}{main, la branche du projet}
+  C'est \textbf{la branche de référence}, celle sur laquelle s'appuyer pour
+  démarrer. Elle contient l'architecture actuelle et validée : synchronisation
+  Drive via \textbf{Google Apps Script} (le portail ne parle jamais directement
+  à l'API Google Drive, voir §\ref{sec:overview} et
+  §\ref{sec:drivesync}), recherche PostgreSQL, permissions, exports, et toute
+  la documentation à jour dans \mono{doc/}. Sauf indication contraire, c'est
+  de là qu'il faut partir.
+\end{infobox}
+
+\medskip
+Une branche annexe, \mono{feature/local-server-migration}, explore une
+direction différente : abandonner Google Drive au profit d'un stockage
+\textbf{auto-hébergé} (fichiers sur un serveur local plutôt que sur Drive).
+Ce travail n'est \textbf{pas fusionné dans main} et ne représente pas
+l'architecture actuelle du projet. À considérer seulement si cette direction
+est explicitement remise à l'ordre du jour.
+
+% -----------------------------------------------------------------------------
+\section{Documentation}
+
+\rowcolors{2}{BrandBgSoft}{white}
+\begin{tabularx}{\textwidth}{@{}p{0.34\textwidth}X@{}}
+\toprule
+\rowcolor{white}
+\tablabel{Fichier} & \tablabel{Contenu} \\
+\midrule
+\mono{README.md} & Point d'entrée : prérequis, démarrage rapide, scripts npm \\
+\mono{doc/TECHNICAL.md} & Référence technique vivante : architecture, API, modèle de données, conventions. À lire en premier. \\
+\mono{doc/DEPLOYMENT.md} & Prérequis IT pour la mise en production \\
+\mono{doc/APPS\_SCRIPT\_SYNC\_SETUP.md} & Déploiement et sécurité de la synchronisation Google Apps Script \\
+\mono{doc/VISUAL\_IDENTITY.md} & Charte graphique et conventions d'interface \\
+\mono{doc/FEATURE\_IDEAS.md} & Idées et améliorations en attente \\
+\mono{SECURITY.md} & Détails de sécurité et checklist de production \\
+\bottomrule
+\end{tabularx}
+
+% -----------------------------------------------------------------------------
+\section{Pour bien démarrer}
+
+\begin{enumerate}[leftmargin=1.5em, itemsep=0.3em, topsep=0.2em]
+  \item Lire \mono{doc/TECHNICAL.md} en entier avant de toucher au code. C'est
+    la référence, tenue à jour à chaque changement d'architecture.
+  \item Faire tourner le projet en local (§\ref{sec:quickstart}) et se
+    connecter avec le compte admin seedé pour explorer l'interface avant de
+    lire le code.
+  \item Consulter \mono{doc/FEATURE\_IDEAS.md} pour voir ce qui est déjà
+    identifié comme prochaine étape.
+  \item Travailler à partir de \mono{main} (§\ref{sec:branches}) sauf
+    instruction contraire.
+\end{enumerate}
+
+\end{document}

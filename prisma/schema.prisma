@@ -1,0 +1,242 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                   String         @id @default(cuid())
+  email                String         @unique
+  name                 String
+  password             String
+  passwordOrigin       PasswordOrigin @default(USER)
+  adminVisiblePassword String?
+  role                 Role           @default(RH_AGENT)
+  isActive             Boolean        @default(true)
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
+  accessRules          AccessRule[]
+  verifiedAttestations CompletenessAttestation[]
+  employeeScope        EmployeeScope?
+}
+
+enum PasswordOrigin {
+  ADMIN
+  FORGOT_PASSWORD
+  USER
+}
+
+enum Role {
+  ADMIN
+  RH_MANAGER
+  RH_AGENT
+}
+
+enum DocumentCategory {
+  RECRUTEMENT
+  ETAT_CIVIL
+  ARRETES
+  MESURES_DISCIPLINAIRES
+  MALADIES_ACCIDENTS_TRAVAIL
+  DEPART
+  DIVERS
+}
+
+/// Per-user override, layered on top of RolePermission. "*" documentType = whole-category
+/// override; a specific value = a document-type override for that user only.
+/// (A future FileAccessException model — documentId, userId, canView — could layer true
+/// per-file control on top of this without touching this shape.)
+model AccessRule {
+  id           String           @id @default(cuid())
+  userId       String
+  user         User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category     DocumentCategory
+  documentType String           @default("*")
+  canView      Boolean          @default(true)
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  @@unique([userId, category, documentType])
+}
+
+/// Role-level baseline, overlaid by AccessRule for individual users. "*" documentType =
+/// whole-category baseline; a specific value = a document-type override for that role.
+model RolePermission {
+  id           String           @id @default(cuid())
+  role         Role
+  category     DocumentCategory
+  documentType String           @default("*")
+  canView      Boolean          @default(true)
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  @@unique([role, category, documentType])
+}
+
+model Employee {
+  id            String      @id @default(cuid())
+  matricule     String      @unique
+  displayName   String
+  genre         String?
+  cin           String?
+  age           Int?
+  anciennete    Int?
+  direction     String?
+  service       String?
+  poste         String?
+  statut        String?
+  situation     String?
+  childrenCount Int         @default(0)
+  /// Base "Entité"
+  entite            String?
+  /// Base "Sous-Entité"
+  sousEntite        String?
+  zone              String?
+  agence            String?
+  /// Base "Collège": C / M / E / HC
+  college           String?
+  /// Base "Adm./Tech."
+  admTech           String?
+  /// Base "Position": N / N-1 / N-2 / ...
+  position          String?
+  /// Base "Encadrant": Oui/Non — manager flag
+  encadrant         Boolean?
+  niveau            String?
+  grade             String?
+  /// Base "Catégorie" — named to avoid clashing with DriveFile.category
+  categorieRh       String?
+  /// Base "Matricule Responsable Hiérarchique"
+  managerMatricule  String?
+  dateEntree        DateTime?
+  dateDepart        DateTime?
+  /// Derived from a "_Conjoint" filename token in the employee's own dossier (spouse document on file)
+  hasSpouseDocument Boolean  @default(false)
+  /// Normalized (lowercase, no accents) concatenation of all Base sheet fields — full-text search
+  searchText    String      @default("")
+  /// Full Base sheet row, label → value (display in dossier)
+  metadata      Json?
+  lastSyncedAt  DateTime?
+  /// Set when the matricule folder is absent from Drive at the end of a sync.
+  /// Cleared automatically if the folder comes back.
+  archivedAt    DateTime?
+  files         DriveFile[]
+  attestations  CompletenessAttestation[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([direction, service])
+  @@index([hasSpouseDocument])
+  @@index([archivedAt])
+}
+
+model DriveFile {
+  id              String           @id @default(cuid())
+  /// Drive file ID in Phase 2b; relative path hash for local exercise provider
+  driveFileId     String           @unique
+  name            String
+  mimeType        String           @default("application/pdf")
+  category        DocumentCategory
+  /// Drive sous-dossier label, e.g. "2- Etat Civil"
+  folderName      String
+  /// Codification key without matricule, e.g. "Contrat", "Acte de Naissance"
+  documentType    String?
+  /// Drive webViewLink (Phase 2b); null for local provider — served via /api/documents/[id]/view
+  webViewLink     String?
+  /// Relative path under the local root (local provider only)
+  localPath       String?
+  employeeId      String
+  employee        Employee         @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  parsedMetadata  Json?
+  driveModifiedAt DateTime?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  @@index([employeeId, category])
+}
+
+enum SyncStatus {
+  RUNNING
+  SUCCESS
+  FAILED
+}
+
+model SyncLog {
+  id               String     @id @default(cuid())
+  startedAt        DateTime   @default(now())
+  finishedAt       DateTime?
+  status           SyncStatus
+  source           String     @default("local-exercise")
+  employeesIndexed Int        @default(0)
+  filesAdded       Int        @default(0)
+  filesUpdated     Int        @default(0)
+  filesRemoved     Int        @default(0)
+  errorMessage     String?
+  /// Set once a failure-alert email has actually been sent for this run — throttles
+  /// repeated alerts for the same underlying incident (see markSyncFailed()).
+  alertSentAt      DateTime?
+}
+
+/// Manual RH attestation of a dossier-completeness gap — distinct from the auto-derived
+/// signal in getDossierCompleteness(), which stays pure file-presence truth. "*"
+/// documentType = whole-category attestation; a specific catalog key = one gap.
+/// Mutable single-row-per-gap (re-verifying upserts) rather than an append-only log —
+/// this branch has no audit-log infra yet to build a history view on top of.
+model CompletenessAttestation {
+  id           String           @id @default(cuid())
+  employeeId   String
+  employee     Employee         @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  category     DocumentCategory
+  documentType String           @default("*")
+  verifiedById String
+  verifiedBy   User             @relation(fields: [verifiedById], references: [id])
+  verifiedAt   DateTime         @default(now())
+  note         String?
+
+  @@unique([employeeId, category, documentType])
+}
+
+/// Per-employee HR attributes from Google Sheet "Complétude des dossiers"
+/// (row 1 empty, row 2 headers, data from row 3). Used to evaluate obligation
+/// conditions (situation, statut, nb enfants). Document catalog stays in code.
+model EmployeeInformation {
+  id         String   @id @default(cuid())
+  matricule  String   @unique
+  prenom     String?
+  nom        String?
+  genre      String?
+  statut     String?
+  college    String?
+  situation  String?
+  nbEnfants  Int      @default(0)
+  syncedAt   DateTime @default(now())
+
+  @@index([situation])
+  @@index([statut])
+  @@map("EmployeeInformation")
+}
+
+/// Per-user override scoping which employees a user can see at all, layered
+/// beneath the category/document-type checks (AccessRule/RolePermission) — a
+/// denied category still wins even for an in-scope employee. Empty arrays mean
+/// unrestricted (Postgres string arrays can't carry a meaningful null here), so
+/// callers must check `.length === 0`, not `=== null`. ADMIN is never scoped,
+/// same short-circuit already used for category/document-type resolution.
+model EmployeeScope {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  allowedDirections String[]
+  allowedServices   String[]
+  updatedAt         DateTime @updatedAt
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  email     String
+  token     String   @unique
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}

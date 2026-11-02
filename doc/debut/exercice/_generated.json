@@ -1,0 +1,1016 @@
+{
+  "employees": [
+    {
+      "matricule": "100001",
+      "prenom": "Youssef",
+      "nom": "El Amrani",
+      "displayName": "Youssef El Amrani",
+      "direction": "Clientèle",
+      "service": "Facturation",
+      "poste": "Responsable Contrôle",
+      "statut": "CDI",
+      "situation": "Actif",
+      "childrenCount": 0,
+      "documentCount": 11
+    },
+    {
+      "matricule": "100002",
+      "prenom": "Sara",
+      "nom": "Bennani",
+      "displayName": "Sara Bennani",
+      "direction": "Clientèle",
+      "service": "Facturation",
+      "poste": "Chargée d'Études",
+      "statut": "ST",
+      "situation": "Actif",
+      "childrenCount": 0,
+      "documentCount": 11
+    },
+    {
+      "matricule": "100003",
+      "prenom": "Omar",
+      "nom": "Alaoui",
+      "displayName": "Omar Alaoui",
+      "direction": "Technique",
+      "service": "Exploitation Réseaux",
+      "poste": "Chef Service Réseaux",
+      "statut": "CDI",
+      "situation": "Actif",
+      "childrenCount": 0,
+      "documentCount": 11
+    },
+    {
+      "matricule": "100004",
+      "prenom": "Imane",
+      "nom": "Tazi",
+      "displayName": "Imane Tazi",
+      "direction": "Technique",
+      "service": "Exploitation Réseaux",
+      "poste": "Technicienne Réseau",
+      "statut": "CDD",
+      "situation": "Actif",
+      "childrenCount": 0,
+      "documentCount": 11
+    },
+    {
+      "matricule": "100005",
+      "prenom": "Hamza",
+      "nom": "Idrissi",
+      "displayName": "Hamza Idrissi",
+      "direction": "Support",
+      "service": "RH",
+      "poste": "Chef Section RH",
+      "statut": "CDI",
+      "situation": "Actif",
+      "childrenCount": 0,
+      "documentCount": 11
+    },
+    {
+      "matricule": "100006",
+      "prenom": "Salma",
+      "nom": "Chraibi",
+      "displayName": "Salma Chraibi",
+      "direction": "Support",
+      "service": "RH",
+      "poste": "Assistante RH",
+      "statut": "ANAPEC",
+      "situation": "Actif",
+      "childrenCount": 0,
+      "documentCount": 11
+    },
+    {
+      "matricule": "100007",
+      "prenom": "Rachid",
+      "nom": "Berrada",
+      "displayName": "Rachid Berrada",
+      "direction": "Clientèle",
+      "service": "Opérations Centrales",
+      "poste": "Directeur Clientèle",
+      "statut": "CDI",
+      "situation": "Actif",
+      "childrenCount": 0,
+      "documentCount": 11
+    },
+    {
+      "matricule": "100008",
+      "prenom": "Asmae",
+      "nom": "Lahlou",
+      "displayName": "Asmae Lahlou",
+      "direction": "Finance",
+      "service": "Contrôle de Gestion",
+      "poste": "Contrôleuse de Gestion",
+      "statut": "ST",
+      "situation": "Actif",
+      "childrenCount": 0,
+      "documentCount": 11
+    },
+    {
+      "matricule": "100009",
+      "prenom": "Mehdi",
+      "nom": "Fassi",
+      "displayName": "Mehdi Fassi",
+      "direction": "Technique",
+      "service": "Maintenance",
+      "poste": "Responsable Maintenance",
+      "statut": "CDI",
+      "situation": "Actif",
+      "childrenCount": 0,
+      "documentCount": 11
+    },
+    {
+      "matricule": "100010",
+      "prenom": "Nadia",
+      "nom": "Benali",
+      "displayName": "Nadia Benali",
+      "direction": "Clientèle",
+      "service": "Opérations Centrales",
+      "poste": "Responsable Segment",
+      "statut": "ST",
+      "situation": "Actif",
+      "childrenCount": 0,
+      "documentCount": 11
+    }
+  ],
+  "documents": [
+    {
+      "id": "doc-001",
+      "employeeMatricule": "100001",
+      "fileName": "100001_Contrat.pdf",
+      "folder": "1- Recrutement",
+      "category": "RECRUTEMENT",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-002",
+      "employeeMatricule": "100001",
+      "fileName": "100001_Curriculum vitae.pdf",
+      "folder": "1- Recrutement",
+      "category": "RECRUTEMENT",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-003",
+      "employeeMatricule": "100001",
+      "fileName": "100001_Fiche d_entretien.pdf",
+      "folder": "1- Recrutement",
+      "category": "RECRUTEMENT",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-004",
+      "employeeMatricule": "100001",
+      "fileName": "100001_Acte de Naissance.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-005",
+      "employeeMatricule": "100001",
+      "fileName": "100001_Badge.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-006",
+      "employeeMatricule": "100001",
+      "fileName": "100001_CIN.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-007",
+      "employeeMatricule": "100001",
+      "fileName": "100001_Photo.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-008",
+      "employeeMatricule": "100001",
+      "fileName": "100001_Note de Mutation.pdf",
+      "folder": "3- Arrêtés",
+      "category": "ARRETES",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-009",
+      "employeeMatricule": "100001",
+      "fileName": "100001_Décision d_avertissement_jj-MM-YYYY.pdf",
+      "folder": "4- Mesures Disciplinaires",
+      "category": "MESURES_DISCIPLINAIRES",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-010",
+      "employeeMatricule": "100001",
+      "fileName": "100001_Maladie.pdf",
+      "folder": "5- Maladies et Accidents de Travail",
+      "category": "MALADIES_ACCIDENTS_TRAVAIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-011",
+      "employeeMatricule": "100001",
+      "fileName": "100001_Demande de Démission.pdf",
+      "folder": "6- Départ",
+      "category": "DEPART",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-012",
+      "employeeMatricule": "100002",
+      "fileName": "100002_Contrat.pdf",
+      "folder": "1- Recrutement",
+      "category": "RECRUTEMENT",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-013",
+      "employeeMatricule": "100002",
+      "fileName": "100002_Curriculum vitae.pdf",
+      "folder": "1- Recrutement",
+      "category": "RECRUTEMENT",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-014",
+      "employeeMatricule": "100002",
+      "fileName": "100002_Fiche d_entretien.pdf",
+      "folder": "1- Recrutement",
+      "category": "RECRUTEMENT",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-015",
+      "employeeMatricule": "100002",
+      "fileName": "100002_Acte de Naissance.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-016",
+      "employeeMatricule": "100002",
+      "fileName": "100002_Badge.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-017",
+      "employeeMatricule": "100002",
+      "fileName": "100002_CIN.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-018",
+      "employeeMatricule": "100002",
+      "fileName": "100002_Photo.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-019",
+      "employeeMatricule": "100002",
+      "fileName": "100002_Note de Mutation.pdf",
+      "folder": "3- Arrêtés",
+      "category": "ARRETES",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-020",
+      "employeeMatricule": "100002",
+      "fileName": "100002_Décision d_avertissement_jj-MM-YYYY.pdf",
+      "folder": "4- Mesures Disciplinaires",
+      "category": "MESURES_DISCIPLINAIRES",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-021",
+      "employeeMatricule": "100002",
+      "fileName": "100002_Maladie.pdf",
+      "folder": "5- Maladies et Accidents de Travail",
+      "category": "MALADIES_ACCIDENTS_TRAVAIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-022",
+      "employeeMatricule": "100002",
+      "fileName": "100002_Demande de Démission.pdf",
+      "folder": "6- Départ",
+      "category": "DEPART",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-023",
+      "employeeMatricule": "100003",
+      "fileName": "100003_Contrat.pdf",
+      "folder": "1- Recrutement",
+      "category": "RECRUTEMENT",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-024",
+      "employeeMatricule": "100003",
+      "fileName": "100003_Curriculum vitae.pdf",
+      "folder": "1- Recrutement",
+      "category": "RECRUTEMENT",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-025",
+      "employeeMatricule": "100003",
+      "fileName": "100003_Fiche d_entretien.pdf",
+      "folder": "1- Recrutement",
+      "category": "RECRUTEMENT",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-026",
+      "employeeMatricule": "100003",
+      "fileName": "100003_Acte de Naissance.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-027",
+      "employeeMatricule": "100003",
+      "fileName": "100003_Badge.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-028",
+      "employeeMatricule": "100003",
+      "fileName": "100003_CIN.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-029",
+      "employeeMatricule": "100003",
+      "fileName": "100003_Photo.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-030",
+      "employeeMatricule": "100003",
+      "fileName": "100003_Note de Mutation.pdf",
+      "folder": "3- Arrêtés",
+      "category": "ARRETES",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-031",
+      "employeeMatricule": "100003",
+      "fileName": "100003_Décision d_avertissement_jj-MM-YYYY.pdf",
+      "folder": "4- Mesures Disciplinaires",
+      "category": "MESURES_DISCIPLINAIRES",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-032",
+      "employeeMatricule": "100003",
+      "fileName": "100003_Maladie.pdf",
+      "folder": "5- Maladies et Accidents de Travail",
+      "category": "MALADIES_ACCIDENTS_TRAVAIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-033",
+      "employeeMatricule": "100003",
+      "fileName": "100003_Demande de Démission.pdf",
+      "folder": "6- Départ",
+      "category": "DEPART",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-034",
+      "employeeMatricule": "100004",
+      "fileName": "100004_Contrat.pdf",
+      "folder": "1- Recrutement",
+      "category": "RECRUTEMENT",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-035",
+      "employeeMatricule": "100004",
+      "fileName": "100004_Curriculum vitae.pdf",
+      "folder": "1- Recrutement",
+      "category": "RECRUTEMENT",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-036",
+      "employeeMatricule": "100004",
+      "fileName": "100004_Fiche d_entretien.pdf",
+      "folder": "1- Recrutement",
+      "category": "RECRUTEMENT",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-037",
+      "employeeMatricule": "100004",
+      "fileName": "100004_Acte de Naissance.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-038",
+      "employeeMatricule": "100004",
+      "fileName": "100004_Badge.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-039",
+      "employeeMatricule": "100004",
+      "fileName": "100004_CIN.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-040",
+      "employeeMatricule": "100004",
+      "fileName": "100004_Photo.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-041",
+      "employeeMatricule": "100004",
+      "fileName": "100004_Note de Mutation.pdf",
+      "folder": "3- Arrêtés",
+      "category": "ARRETES",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-042",
+      "employeeMatricule": "100004",
+      "fileName": "100004_Décision d_avertissement_jj-MM-YYYY.pdf",
+      "folder": "4- Mesures Disciplinaires",
+      "category": "MESURES_DISCIPLINAIRES",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-043",
+      "employeeMatricule": "100004",
+      "fileName": "100004_Maladie.pdf",
+      "folder": "5- Maladies et Accidents de Travail",
+      "category": "MALADIES_ACCIDENTS_TRAVAIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-044",
+      "employeeMatricule": "100004",
+      "fileName": "100004_Demande de Démission.pdf",
+      "folder": "6- Départ",
+      "category": "DEPART",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-045",
+      "employeeMatricule": "100005",
+      "fileName": "100005_Contrat.pdf",
+      "folder": "1- Recrutement",
+      "category": "RECRUTEMENT",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-046",
+      "employeeMatricule": "100005",
+      "fileName": "100005_Curriculum vitae.pdf",
+      "folder": "1- Recrutement",
+      "category": "RECRUTEMENT",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-047",
+      "employeeMatricule": "100005",
+      "fileName": "100005_Fiche d_entretien.pdf",
+      "folder": "1- Recrutement",
+      "category": "RECRUTEMENT",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-048",
+      "employeeMatricule": "100005",
+      "fileName": "100005_Acte de Naissance.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-049",
+      "employeeMatricule": "100005",
+      "fileName": "100005_Badge.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-050",
+      "employeeMatricule": "100005",
+      "fileName": "100005_CIN.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-051",
+      "employeeMatricule": "100005",
+      "fileName": "100005_Photo.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-052",
+      "employeeMatricule": "100005",
+      "fileName": "100005_Note de Mutation.pdf",
+      "folder": "3- Arrêtés",
+      "category": "ARRETES",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-053",
+      "employeeMatricule": "100005",
+      "fileName": "100005_Décision d_avertissement_jj-MM-YYYY.pdf",
+      "folder": "4- Mesures Disciplinaires",
+      "category": "MESURES_DISCIPLINAIRES",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-054",
+      "employeeMatricule": "100005",
+      "fileName": "100005_Maladie.pdf",
+      "folder": "5- Maladies et Accidents de Travail",
+      "category": "MALADIES_ACCIDENTS_TRAVAIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-055",
+      "employeeMatricule": "100005",
+      "fileName": "100005_Demande de Démission.pdf",
+      "folder": "6- Départ",
+      "category": "DEPART",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-056",
+      "employeeMatricule": "100006",
+      "fileName": "100006_Contrat.pdf",
+      "folder": "1- Recrutement",
+      "category": "RECRUTEMENT",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-057",
+      "employeeMatricule": "100006",
+      "fileName": "100006_Curriculum vitae.pdf",
+      "folder": "1- Recrutement",
+      "category": "RECRUTEMENT",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-058",
+      "employeeMatricule": "100006",
+      "fileName": "100006_Fiche d_entretien.pdf",
+      "folder": "1- Recrutement",
+      "category": "RECRUTEMENT",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-059",
+      "employeeMatricule": "100006",
+      "fileName": "100006_Acte de Naissance.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-060",
+      "employeeMatricule": "100006",
+      "fileName": "100006_Badge.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-061",
+      "employeeMatricule": "100006",
+      "fileName": "100006_CIN.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-062",
+      "employeeMatricule": "100006",
+      "fileName": "100006_Photo.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-063",
+      "employeeMatricule": "100006",
+      "fileName": "100006_Note de Mutation.pdf",
+      "folder": "3- Arrêtés",
+      "category": "ARRETES",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-064",
+      "employeeMatricule": "100006",
+      "fileName": "100006_Décision d_avertissement_jj-MM-YYYY.pdf",
+      "folder": "4- Mesures Disciplinaires",
+      "category": "MESURES_DISCIPLINAIRES",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-065",
+      "employeeMatricule": "100006",
+      "fileName": "100006_Maladie.pdf",
+      "folder": "5- Maladies et Accidents de Travail",
+      "category": "MALADIES_ACCIDENTS_TRAVAIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-066",
+      "employeeMatricule": "100006",
+      "fileName": "100006_Demande de Démission.pdf",
+      "folder": "6- Départ",
+      "category": "DEPART",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-067",
+      "employeeMatricule": "100007",
+      "fileName": "100007_Contrat.pdf",
+      "folder": "1- Recrutement",
+      "category": "RECRUTEMENT",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-068",
+      "employeeMatricule": "100007",
+      "fileName": "100007_Curriculum vitae.pdf",
+      "folder": "1- Recrutement",
+      "category": "RECRUTEMENT",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-069",
+      "employeeMatricule": "100007",
+      "fileName": "100007_Fiche d_entretien.pdf",
+      "folder": "1- Recrutement",
+      "category": "RECRUTEMENT",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-070",
+      "employeeMatricule": "100007",
+      "fileName": "100007_Acte de Naissance.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-071",
+      "employeeMatricule": "100007",
+      "fileName": "100007_Badge.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-072",
+      "employeeMatricule": "100007",
+      "fileName": "100007_CIN.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-073",
+      "employeeMatricule": "100007",
+      "fileName": "100007_Photo.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-074",
+      "employeeMatricule": "100007",
+      "fileName": "100007_Note de Mutation.pdf",
+      "folder": "3- Arrêtés",
+      "category": "ARRETES",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-075",
+      "employeeMatricule": "100007",
+      "fileName": "100007_Décision d_avertissement_jj-MM-YYYY.pdf",
+      "folder": "4- Mesures Disciplinaires",
+      "category": "MESURES_DISCIPLINAIRES",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-076",
+      "employeeMatricule": "100007",
+      "fileName": "100007_Maladie.pdf",
+      "folder": "5- Maladies et Accidents de Travail",
+      "category": "MALADIES_ACCIDENTS_TRAVAIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-077",
+      "employeeMatricule": "100007",
+      "fileName": "100007_Demande de Démission.pdf",
+      "folder": "6- Départ",
+      "category": "DEPART",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-078",
+      "employeeMatricule": "100008",
+      "fileName": "100008_Contrat.pdf",
+      "folder": "1- Recrutement",
+      "category": "RECRUTEMENT",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-079",
+      "employeeMatricule": "100008",
+      "fileName": "100008_Curriculum vitae.pdf",
+      "folder": "1- Recrutement",
+      "category": "RECRUTEMENT",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-080",
+      "employeeMatricule": "100008",
+      "fileName": "100008_Fiche d_entretien.pdf",
+      "folder": "1- Recrutement",
+      "category": "RECRUTEMENT",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-081",
+      "employeeMatricule": "100008",
+      "fileName": "100008_Acte de Naissance.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-082",
+      "employeeMatricule": "100008",
+      "fileName": "100008_Badge.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-083",
+      "employeeMatricule": "100008",
+      "fileName": "100008_CIN.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-084",
+      "employeeMatricule": "100008",
+      "fileName": "100008_Photo.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-085",
+      "employeeMatricule": "100008",
+      "fileName": "100008_Note de Mutation.pdf",
+      "folder": "3- Arrêtés",
+      "category": "ARRETES",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-086",
+      "employeeMatricule": "100008",
+      "fileName": "100008_Décision d_avertissement_jj-MM-YYYY.pdf",
+      "folder": "4- Mesures Disciplinaires",
+      "category": "MESURES_DISCIPLINAIRES",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-087",
+      "employeeMatricule": "100008",
+      "fileName": "100008_Maladie.pdf",
+      "folder": "5- Maladies et Accidents de Travail",
+      "category": "MALADIES_ACCIDENTS_TRAVAIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-088",
+      "employeeMatricule": "100008",
+      "fileName": "100008_Demande de Démission.pdf",
+      "folder": "6- Départ",
+      "category": "DEPART",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-089",
+      "employeeMatricule": "100009",
+      "fileName": "100009_Contrat.pdf",
+      "folder": "1- Recrutement",
+      "category": "RECRUTEMENT",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-090",
+      "employeeMatricule": "100009",
+      "fileName": "100009_Curriculum vitae.pdf",
+      "folder": "1- Recrutement",
+      "category": "RECRUTEMENT",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-091",
+      "employeeMatricule": "100009",
+      "fileName": "100009_Fiche d_entretien.pdf",
+      "folder": "1- Recrutement",
+      "category": "RECRUTEMENT",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-092",
+      "employeeMatricule": "100009",
+      "fileName": "100009_Acte de Naissance.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-093",
+      "employeeMatricule": "100009",
+      "fileName": "100009_Badge.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-094",
+      "employeeMatricule": "100009",
+      "fileName": "100009_CIN.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-095",
+      "employeeMatricule": "100009",
+      "fileName": "100009_Photo.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-096",
+      "employeeMatricule": "100009",
+      "fileName": "100009_Note de Mutation.pdf",
+      "folder": "3- Arrêtés",
+      "category": "ARRETES",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-097",
+      "employeeMatricule": "100009",
+      "fileName": "100009_Décision d_avertissement_jj-MM-YYYY.pdf",
+      "folder": "4- Mesures Disciplinaires",
+      "category": "MESURES_DISCIPLINAIRES",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-098",
+      "employeeMatricule": "100009",
+      "fileName": "100009_Maladie.pdf",
+      "folder": "5- Maladies et Accidents de Travail",
+      "category": "MALADIES_ACCIDENTS_TRAVAIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-099",
+      "employeeMatricule": "100009",
+      "fileName": "100009_Demande de Démission.pdf",
+      "folder": "6- Départ",
+      "category": "DEPART",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-100",
+      "employeeMatricule": "100010",
+      "fileName": "100010_Contrat.pdf",
+      "folder": "1- Recrutement",
+      "category": "RECRUTEMENT",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-101",
+      "employeeMatricule": "100010",
+      "fileName": "100010_Curriculum vitae.pdf",
+      "folder": "1- Recrutement",
+      "category": "RECRUTEMENT",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-102",
+      "employeeMatricule": "100010",
+      "fileName": "100010_Fiche d_entretien.pdf",
+      "folder": "1- Recrutement",
+      "category": "RECRUTEMENT",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-103",
+      "employeeMatricule": "100010",
+      "fileName": "100010_Acte de Naissance.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-104",
+      "employeeMatricule": "100010",
+      "fileName": "100010_Badge.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-105",
+      "employeeMatricule": "100010",
+      "fileName": "100010_CIN.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-106",
+      "employeeMatricule": "100010",
+      "fileName": "100010_Photo.pdf",
+      "folder": "2- Etat Civil",
+      "category": "ETAT_CIVIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-107",
+      "employeeMatricule": "100010",
+      "fileName": "100010_Note de Mutation.pdf",
+      "folder": "3- Arrêtés",
+      "category": "ARRETES",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-108",
+      "employeeMatricule": "100010",
+      "fileName": "100010_Décision d_avertissement_jj-MM-YYYY.pdf",
+      "folder": "4- Mesures Disciplinaires",
+      "category": "MESURES_DISCIPLINAIRES",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-109",
+      "employeeMatricule": "100010",
+      "fileName": "100010_Maladie.pdf",
+      "folder": "5- Maladies et Accidents de Travail",
+      "category": "MALADIES_ACCIDENTS_TRAVAIL",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    },
+    {
+      "id": "doc-110",
+      "employeeMatricule": "100010",
+      "fileName": "100010_Demande de Démission.pdf",
+      "folder": "6- Départ",
+      "category": "DEPART",
+      "modifiedAt": "2026-05-01T08:00:00Z"
+    }
+  ]
+}

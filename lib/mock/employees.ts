@@ -1,0 +1,127 @@
+import type { MockEmployee } from "@/lib/mock/types";
+
+/** From Etat personnel exercice.xlsx (sheet Base). Regenerate: python scripts/generate-exercise-mock.py */
+export const mockEmployees: MockEmployee[] = [
+  {
+    matricule: "100001",
+    displayName: "Youssef El Amrani",
+    direction: "Clientèle",
+    service: "Facturation",
+    poste: "Responsable Contrôle",
+    statut: "CDI",
+    situation: "Actif",
+    childrenCount: 0,
+    documentCount: 11,
+  },
+  {
+    matricule: "100002",
+    displayName: "Sara Bennani",
+    direction: "Clientèle",
+    service: "Facturation",
+    poste: "Chargée d'Études",
+    statut: "ST",
+    situation: "Actif",
+    childrenCount: 0,
+    documentCount: 11,
+  },
+  {
+    matricule: "100003",
+    displayName: "Omar Alaoui",
+    direction: "Technique",
+    service: "Exploitation Réseaux",
+    poste: "Chef Service Réseaux",
+    statut: "CDI",
+    situation: "Actif",
+    childrenCount: 0,
+    documentCount: 11,
+  },
+  {
+    matricule: "100004",
+    displayName: "Imane Tazi",
+    direction: "Technique",
+    service: "Exploitation Réseaux",
+    poste: "Technicienne Réseau",
+    statut: "CDD",
+    situation: "Actif",
+    childrenCount: 0,
+    documentCount: 11,
+  },
+  {
+    matricule: "100005",
+    displayName: "Hamza Idrissi",
+    direction: "Support",
+    service: "RH",
+    poste: "Chef Section RH",
+    statut: "CDI",
+    situation: "Actif",
+    childrenCount: 0,
+    documentCount: 11,
+  },
+  {
+    matricule: "100006",
+    displayName: "Salma Chraibi",
+    direction: "Support",
+    service: "RH",
+    poste: "Assistante RH",
+    statut: "ANAPEC",
+    situation: "Actif",
+    childrenCount: 0,
+    documentCount: 11,
+  },
+  {
+    matricule: "100007",
+    displayName: "Rachid Berrada",
+    direction: "Clientèle",
+    service: "Opérations Centrales",
+    poste: "Directeur Clientèle",
+    statut: "CDI",
+    situation: "Actif",
+    childrenCount: 0,
+    documentCount: 11,
+  },
+  {
+    matricule: "100008",
+    displayName: "Asmae Lahlou",
+    direction: "Finance",
+    service: "Contrôle de Gestion",
+    poste: "Contrôleuse de Gestion",
+    statut: "ST",
+    situation: "Actif",
+    childrenCount: 0,
+    documentCount: 11,
+  },
+  {
+    matricule: "100009",
+    displayName: "Mehdi Fassi",
+    direction: "Technique",
+    service: "Maintenance",
+    poste: "Responsable Maintenance",
+    statut: "CDI",
+    situation: "Actif",
+    childrenCount: 0,
+    documentCount: 11,
+  },
+  {
+    matricule: "100010",
+    displayName: "Nadia Benali",
+    direction: "Clientèle",
+    service: "Opérations Centrales",
+    poste: "Responsable Segment",
+    statut: "ST",
+    situation: "Actif",
+    childrenCount: 0,
+    documentCount: 11,
+  },
+];
+
+export function getMockEmployee(matricule: string): MockEmployee | undefined {
+  return mockEmployees.find((e) => e.matricule === matricule);
+}
+
+export function getMockEmployeeStats() {
+  return {
+    totalEmployees: mockEmployees.length,
+    totalDocuments: mockEmployees.reduce((sum, e) => sum + e.documentCount, 0),
+    withThreePlusChildren: mockEmployees.filter((e) => e.childrenCount >= 3).length,
+  };
+}

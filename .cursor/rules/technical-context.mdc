@@ -1,0 +1,20 @@
+---
+description: Always use TECHNICAL.md as the source of truth for this project
+alwaysApply: true
+---
+
+# Portail RH — project context
+
+Before planning or implementing changes in `projet-rh-annexe`:
+
+1. Read **`doc/TECHNICAL.md`** before any task.
+2. Follow its architecture, phase status, security rules, and coding conventions.
+3. When you change routes, APIs, Prisma models, env vars, or security behaviour, **update `doc/TECHNICAL.md`** in the same change (including the changelog table at the bottom).
+
+Key constraints:
+
+- Google Drive = file storage; PostgreSQL = index + users + permissions (Phase 2+).
+- Never import `lib/db` in Edge middleware or client components.
+- Use `auth.config.ts` (Edge) vs `auth.ts` (Node + Prisma) split.
+- User-facing copy in French; keep technical docs in English.
+- Phase 1 is done (auth, admin users, SMTP). Do not implement Drive sync unless asked (Phase 2).
