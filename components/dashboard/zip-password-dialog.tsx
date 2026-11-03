@@ -67,8 +67,8 @@ export function ZipPasswordDialog({
             Protéger le ZIP
           </DialogTitle>
           <DialogDescription>
-            Choisissez un mot de passe. Sans lui, personne ne pourra ouvrir les
-            documents téléchargés (CIN, contrats, etc.).
+            Choisissez un mot de passe. Il est demandé seulement pour ouvrir ou
+            extraire le ZIP. Les fichiers à l’intérieur restent sans mot de passe.
           </DialogDescription>
         </DialogHeader>
 
@@ -102,8 +102,8 @@ export function ZipPasswordDialog({
           </div>
           {error && <p className="text-xs text-destructive">{error}</p>}
           <p className="text-xs text-muted-foreground">
-            Minimum 6 caractères. Le même mot de passe ouvre le ZIP et chaque
-            PDF, même après extraction. Ouvrez le ZIP avec <strong>7-Zip</strong>.
+            Minimum 6 caractères. Une fois le ZIP extrait, les PDF et les autres
+            fichiers s’ouvrent directement. Ouvrez le ZIP avec <strong>7-Zip</strong>.
             Le fichier s’appelle <strong>export-documents-date.zip</strong>.
           </p>
           <DialogFooter className="mt-1">

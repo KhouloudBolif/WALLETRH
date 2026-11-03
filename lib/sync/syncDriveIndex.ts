@@ -4,7 +4,7 @@
  * 1. Import employee metadata from the Base sheet (upsert by matricule).
  * 2. Walk the storage tree: {matricule}/{sous-dossier}/*.pdf → upsert DriveFile.
  * 3. Remove stale DriveFile rows that no longer exist in the backend.
- * 4. Archive employees whose matricule folder is no longer on Drive.
+ * 4. Archive employees who are no longer in the Base sheet.
  * 5. Write a SyncLog row with counts.
  *
  * `reconcileDriveIndex` is the provider-agnostic reconciliation step (steps 1–4
@@ -95,41 +95,37 @@ export type ReconcileInput = {
   driveMatricules?: string[];
 };
 
-/**
- * Employees whose matricule folder was not seen in this sync go to the annuaire
- * archive. A folder that comes back clears archivedAt. Older webhook payloads
- * omit driveMatricules: we then infer presence from files touched in this run,
- * and skip the step entirely when that set is empty so a failed empty push
- * cannot archive the whole workforce.
- */
-async function archiveMissingDriveFolders(startedAt: Date, input: ReconcileInput) {
-  const seen = new Set<string>();
+function baseMatriculesOf(employees: RawEmployeeInput[]) {
+  return [...new Set(employees.map((row) => row.matricule.trim()).filter(Boolean))];
+}
 
-  if (input.driveMatricules) {
-    for (const matricule of input.driveMatricules) {
-      const trimmed = matricule.trim();
-      if (trimmed) seen.add(trimmed);
-    }
-  } else {
-    const touched = await prisma.driveFile.findMany({
-      where: { updatedAt: { gte: startedAt } },
-      select: { employee: { select: { matricule: true } } },
-    });
-    for (const row of touched) seen.add(row.employee.matricule);
-    if (seen.size === 0) return;
-  }
+/** Remember the Base-sheet matricules from the first chunk so the last chunk can archive. */
+async function rememberBaseMatricules(syncLogId: string, employees: RawEmployeeInput[] | undefined) {
+  if (!employees) return;
+  await prisma.syncLog.update({
+    where: { id: syncLogId },
+    data: { baseMatricules: baseMatriculesOf(employees) },
+  });
+}
+
+/**
+ * Employees missing from the Base sheet go to the annuaire archive. Their Drive
+ * folder and files stay. A matricule that returns to the sheet is unarchived.
+ * An empty list is ignored so a failed sheet read cannot archive everyone.
+ */
+async function archiveEmployeesAbsentFromBase(syncLogId: string, input: ReconcileInput) {
+  const present = input.employees
+    ? baseMatriculesOf(input.employees)
+    : (
+        await prisma.syncLog.findUniqueOrThrow({
+          where: { id: syncLogId },
+          select: { baseMatricules: true },
+        })
+      ).baseMatricules;
+
+  if (present.length === 0) return;
 
   const now = new Date();
-  const present = [...seen];
-
-  if (present.length === 0) {
-    await prisma.employee.updateMany({
-      where: { archivedAt: null },
-      data: { archivedAt: now },
-    });
-    return;
-  }
-
   await prisma.employee.updateMany({
     where: { matricule: { in: present }, NOT: { archivedAt: null } },
     data: { archivedAt: null },
@@ -144,8 +140,23 @@ function stableFileId(source: string, backendFileId: string): string {
   return createHash("sha256").update(`${source}:${backendFileId}`).digest("hex").slice(0, 32);
 }
 
-export async function startSyncRun(source: string) {
-  return prisma.syncLog.create({ data: { status: "RUNNING", source } });
+export async function startSyncRun(source: string, triggeredByUserId?: string | null) {
+  let triggeredById: string | null = null;
+  if (triggeredByUserId) {
+    const user = await prisma.user.findUnique({
+      where: { id: triggeredByUserId },
+      select: { id: true },
+    });
+    triggeredById = user?.id ?? null;
+  }
+
+  return prisma.syncLog.create({
+    data: {
+      status: "RUNNING",
+      source,
+      triggeredById,
+    },
+  });
 }
 
 async function appendUnknownFolders(syncLogId: string, unknownFolders: string[]) {
@@ -275,12 +286,13 @@ export async function reconcileDriveIndex(
       };
       const employee = await prisma.employee.upsert({
         where: { matricule: row.matricule },
-        create: { matricule: row.matricule, ...fields },
-        update: fields,
+        create: { matricule: row.matricule, ...fields, archivedAt: null },
+        update: { ...fields, archivedAt: null },
       });
       employeeByMatricule.set(row.matricule, employee.id);
     }
     employeesIndexed = input.employees?.length ?? 0;
+    await rememberBaseMatricules(syncLogId, input.employees);
 
     // 1b. Employee situation / enfants from Sheet "Complétude des dossiers"
     if (input.employeeInformation) {
@@ -391,7 +403,7 @@ export async function reconcileDriveIndex(
       });
       filesRemoved = removed.count;
 
-      await archiveMissingDriveFolders(log.startedAt, input);
+      await archiveEmployeesAbsentFromBase(syncLogId, input);
 
       await prisma.syncLog.update({
         where: { id: syncLogId },
@@ -482,19 +494,44 @@ export async function syncDriveIndex(): Promise<SyncResult> {
   }
 }
 
-export async function getSyncOverview() {
-  const [lastLog, history, employeeCount, fileCount] = await Promise.all([
+export const SYNC_HISTORY_PAGE_SIZE = 10;
+
+export async function getSyncOverview(options?: { page?: number; pageSize?: number }) {
+  const pageSize = Math.min(Math.max(options?.pageSize ?? SYNC_HISTORY_PAGE_SIZE, 1), 50);
+  const page = Math.max(options?.page ?? 1, 1);
+  const skip = (page - 1) * pageSize;
+
+  const syncLogInclude = {
+    triggeredBy: { select: { id: true, name: true, email: true } },
+  } as const;
+
+  const [lastLog, history, historyTotal, employeeCount, fileCount] = await Promise.all([
     prisma.syncLog.findFirst({
       where: { status: { not: "RUNNING" } },
       orderBy: { startedAt: "desc" },
+      include: syncLogInclude,
     }),
     prisma.syncLog.findMany({
       orderBy: { startedAt: "desc" },
-      take: 10,
+      skip,
+      take: pageSize,
+      include: syncLogInclude,
     }),
+    prisma.syncLog.count(),
     prisma.employee.count(),
     prisma.driveFile.count(),
   ]);
 
-  return { lastLog, history, employeeCount, fileCount };
+  const pageCount = Math.max(1, Math.ceil(historyTotal / pageSize));
+
+  return {
+    lastLog,
+    history,
+    historyTotal,
+    page: Math.min(page, pageCount),
+    pageSize,
+    pageCount,
+    employeeCount,
+    fileCount,
+  };
 }

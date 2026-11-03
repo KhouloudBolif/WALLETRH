@@ -52,6 +52,11 @@ function runSync() {
     const employeeInformation = readCompletenessSheet_(baseSheetId);
     const walked = walkDriveTree_(rootFolderId);
     const files = walked.files;
+    // Utilisateur portail ayant cliqué Synchroniser (stocké par schedulePortalSync_).
+    const triggeredByUserId = props.getProperty("PENDING_SYNC_USER_ID");
+    if (triggeredByUserId) {
+      props.deleteProperty("PENDING_SYNC_USER_ID");
+    }
 
     let syncLogId = null;
     const chunks = chunk_(files, FILES_PER_CHUNK);
@@ -69,6 +74,7 @@ function runSync() {
       if (isFirst) {
         payload.employees = employees;
         payload.employeeInformation = employeeInformation;
+        if (triggeredByUserId) payload.triggeredByUserId = triggeredByUserId;
       }
       if (isFinal) payload.driveMatricules = walked.matricules;
 
@@ -433,6 +439,8 @@ function doGet(e) {
   e = e || {};
   var extracted = extractEnvelopeRaw_(e);
   if (extracted.raw) {
+    var syncGet = tryHandleSyncTrigger_(extracted.raw, true);
+    if (syncGet) return syncGet;
     return runZipExport_(extracted.raw, true);
   }
   return HtmlService.createHtmlOutput(zipRelayHtml_()).setTitle("Export ZIP Portail RH");
@@ -444,7 +452,114 @@ function doPost(e) {
     extracted.fromBrowser ||
     !!(e && e.parameter && e.parameter.envelope) ||
     !!(e && e.postData && /envelope=/i.test(String(e.postData.contents || "")));
+
+  // Bouton « Synchroniser » du portail : envelope signé { action: "runSync" }
+  // (via form POST navigateur — la session Google Veolia est requise).
+  var syncPost = tryHandleSyncTrigger_(extracted.raw, fromBrowser);
+  if (syncPost) return syncPost;
+
   return runZipExport_(extracted.raw, fromBrowser);
+}
+
+/**
+ * Déclenche runSync depuis le portail (admin), sans bloquer la Web App 6 min.
+ * Planifie une exécution one-shot ~3 s plus tard, puis répond immédiatement.
+ * fromBrowser=true → page HTML + postMessage (Web App domaine Veolia).
+ */
+function tryHandleSyncTrigger_(raw, fromBrowser) {
+  if (!raw) return null;
+  try {
+    var envelope = typeof raw === "string" ? JSON.parse(raw) : raw;
+    if (!envelope || !envelope.payload) return null;
+
+    var body;
+    try {
+      body = JSON.parse(envelope.payload);
+    } catch (parseErr) {
+      return null;
+    }
+    if (!body || body.action !== "runSync") return null;
+
+    var secret = PropertiesService.getScriptProperties().getProperty("SYNC_SECRET");
+    if (!secret || !verifyEnvelope_(envelope, secret)) {
+      var sigErr = "Signature invalide. Vérifiez SYNC_SECRET = DRIVE_SYNC_WEBHOOK_SECRET.";
+      return fromBrowser ? htmlSyncResult_(false, sigErr) : jsonOutput_({ error: sigErr });
+    }
+
+    var result = schedulePortalSync_(body.triggeredByUserId || null);
+    if (fromBrowser) {
+      return htmlSyncResult_(true, result.message || "Synchronisation planifiée.");
+    }
+    return jsonOutput_(result);
+  } catch (err) {
+    var msg = String(err);
+    return fromBrowser ? htmlSyncResult_(false, msg) : jsonOutput_({ error: msg });
+  }
+}
+
+/** Page HTML pour le popup navigateur (postMessage vers le Portail). */
+function htmlSyncResult_(ok, message) {
+  var html = HtmlService.createHtmlOutput(
+    "<!DOCTYPE html><html><head><meta charset='utf-8'></head>" +
+      "<body style='font-family:system-ui,sans-serif;padding:1.5rem'>" +
+      "<p>" +
+      String(message).replace(/</g, "&lt;") +
+      "</p>" +
+      "<script>" +
+      "var msg={type:" +
+      (ok ? "'portail-rh-sync-ok'" : "'portail-rh-sync-error'") +
+      ",message:" +
+      JSON.stringify(String(message)) +
+      "};" +
+      "var seen=[];" +
+      "function send(w){if(!w)return;for(var i=0;i<seen.length;i++){if(seen[i]===w)return;}seen.push(w);try{w.postMessage(msg,'*');}catch(e){}}" +
+      "var p=window;for(var n=0;n<6&&p;n++){try{send(p.opener);}catch(e){}try{if(!p.parent||p.parent===p)break;p=p.parent;}catch(e2){break;}}" +
+      "setTimeout(function(){try{window.close();}catch(e){}},1500);" +
+      "</script></body></html>",
+  );
+  html.setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+  return html;
+}
+
+function schedulePortalSync_(triggeredByUserId) {
+  var props = PropertiesService.getScriptProperties();
+  if (triggeredByUserId) {
+    props.setProperty("PENDING_SYNC_USER_ID", String(triggeredByUserId));
+  } else {
+    props.deleteProperty("PENDING_SYNC_USER_ID");
+  }
+
+  var triggers = ScriptApp.getProjectTriggers();
+  for (var i = 0; i < triggers.length; i++) {
+    if (triggers[i].getHandlerFunction() === "runSyncFromPortal_") {
+      ScriptApp.deleteTrigger(triggers[i]);
+    }
+  }
+
+  ScriptApp.newTrigger("runSyncFromPortal_")
+    .timeBased()
+    .after(3000)
+    .create();
+
+  return {
+    ok: true,
+    scheduled: true,
+    message: "Synchronisation planifiée — elle démarre dans quelques secondes.",
+  };
+}
+
+/** Handler one-shot créé par schedulePortalSync_ (appel portail). */
+function runSyncFromPortal_() {
+  try {
+    runSync();
+  } finally {
+    var triggers = ScriptApp.getProjectTriggers();
+    for (var i = 0; i < triggers.length; i++) {
+      if (triggers[i].getHandlerFunction() === "runSyncFromPortal_") {
+        ScriptApp.deleteTrigger(triggers[i]);
+      }
+    }
+  }
 }
 
 /** Appelé depuis la page relais via google.script.run (envelope JSON string). */

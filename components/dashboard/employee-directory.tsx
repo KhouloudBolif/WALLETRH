@@ -95,8 +95,8 @@ export function EmployeeDirectory({ employees }: { employees: EmployeeSummary[] 
         title="Annuaire salariés"
         description={
           activeEmployees.length > 0
-            ? `${activeEmployees.length} salariés avec un dossier Drive`
-            : "Index vide — lancez la synchronisation (Admin → Synchronisation)"
+            ? `${activeEmployees.length} salariés présents dans la feuille Base`
+            : "Index vide — lancez la synchronisation (menu Synchronisation)"
         }
       >
         <StatChip label="Actifs" value={activeEmployees.length} />
@@ -172,7 +172,7 @@ export function EmployeeDirectory({ employees }: { employees: EmployeeSummary[] 
         {showArchive ? (
           <>
             <p className="border-b border-border/70 bg-muted/30 px-4 py-2.5 text-xs text-muted-foreground sm:px-5">
-              Salariés dont le dossier Drive n&apos;existe plus. Ils restent consultables.
+              Salariés retirés de la feuille Base. Leur dossier Drive reste consultable.
             </p>
             <Table>
               <TableHeader>
@@ -225,7 +225,7 @@ export function EmployeeDirectory({ employees }: { employees: EmployeeSummary[] 
                 title={archivedEmployees.length === 0 ? "Aucune archive" : "Aucune archive trouvée"}
                 text={
                   archivedEmployees.length === 0
-                    ? "Une personne apparaît ici quand son dossier Drive n'est plus là, après une synchronisation."
+                    ? "Une personne apparaît ici quand elle n'est plus dans la feuille Base, après une synchronisation."
                     : "Aucune archive ne correspond à la recherche."
                 }
               />

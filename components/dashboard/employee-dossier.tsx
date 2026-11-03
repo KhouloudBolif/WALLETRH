@@ -232,7 +232,7 @@ export function EmployeeDossier({ employee, documents }: EmployeeDossierProps) {
                 </h1>
                 {employee.archivedAt && (
                   <Badge variant="outline" className="mt-1">
-                    Archivé — dossier Drive absent
+                    Archivé — absent de la feuille Base
                   </Badge>
                 )}
                 <p className="mt-0.5 font-mono text-xs text-muted-foreground">

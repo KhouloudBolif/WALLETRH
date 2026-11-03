@@ -32,7 +32,7 @@ export function CompletenessSection({ data }: { data: CompletenessOverview }) {
 
   return (
     <section className="space-y-4">
-      <div>
+      <div className="report-enter" style={{ animationDelay: "80ms" }}>
         <h2 className="text-lg font-semibold tracking-tight text-foreground">Complétude des dossiers</h2>
         <p className="mt-0.5 text-sm text-muted-foreground">
           Taux de complétude et documents manquants, agrégés sur l&apos;ensemble des salariés visibles.
@@ -48,6 +48,7 @@ export function CompletenessSection({ data }: { data: CompletenessOverview }) {
               ? `Priorité de relance : ${topMissing.label} (${topMissing.missing} manquant${topMissing.missing > 1 ? "s" : ""}).`
               : "Aucun document obligatoire ne manque."
           }
+          delayMs={120}
         >
           <ScoreRing
             ratio={data.overallRate}
@@ -74,6 +75,7 @@ export function CompletenessSection({ data }: { data: CompletenessOverview }) {
             hint="Documents exigés et présents"
             tone={rate >= 80 ? "teal" : rate >= 50 ? "cyan" : "rose"}
             icon={CheckCircle2}
+            delayMs={160}
           />
           <KpiCard
             label="Salariés avec au moins un manquant"
@@ -85,6 +87,7 @@ export function CompletenessSection({ data }: { data: CompletenessOverview }) {
             }
             tone="rose"
             icon={AlertTriangle}
+            delayMs={210}
           />
           <KpiCard
             label="Salariés couverts"
@@ -92,12 +95,17 @@ export function CompletenessSection({ data }: { data: CompletenessOverview }) {
             hint="Périmètre de ce rapport"
             tone="violet"
             icon={Users}
+            delayMs={260}
           />
         </div>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <StudioCard title="Complétude par catégorie" description="Part des documents exigés déjà présents.">
+        <StudioCard
+          title="Complétude par catégorie"
+          description="Part des documents exigés déjà présents."
+          delayMs={300}
+        >
           <MeterList
             tone="status"
             scale="percent"
@@ -114,6 +122,7 @@ export function CompletenessSection({ data }: { data: CompletenessOverview }) {
         <StudioCard
           title="Documents les plus souvent manquants"
           description="Ce qu'il est le plus utile de relancer en priorité."
+          delayMs={350}
         >
           {data.byDocumentType.length === 0 ? (
             <p className="text-sm text-muted-foreground">Aucun document manquant — dossiers complets.</p>
@@ -135,7 +144,7 @@ export function CompletenessSection({ data }: { data: CompletenessOverview }) {
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <StudioCard title="Manquants par direction" description="Où concentrer les relances.">
+        <StudioCard title="Manquants par direction" description="Où concentrer les relances." delayMs={400}>
           {data.byDirection.length === 0 ? (
             <p className="text-sm text-muted-foreground">Aucune direction.</p>
           ) : (
@@ -154,7 +163,11 @@ export function CompletenessSection({ data }: { data: CompletenessOverview }) {
           )}
         </StudioCard>
 
-        <StudioCard title="Dossiers les plus incomplets" description="Dix salariés avec le plus de documents manquants.">
+        <StudioCard
+          title="Dossiers les plus incomplets"
+          description="Dix salariés avec le plus de documents manquants."
+          delayMs={450}
+        >
           {data.topGaps.length === 0 ? (
             <p className="text-sm text-muted-foreground">Aucun dossier incomplet.</p>
           ) : (
@@ -162,7 +175,11 @@ export function CompletenessSection({ data }: { data: CompletenessOverview }) {
               {data.topGaps.map((row, index) => {
                 const max = data.topGaps[0]?.missingCount || 1;
                 return (
-                  <li key={row.matricule}>
+                  <li
+                    key={row.matricule}
+                    className="report-enter"
+                    style={{ animationDelay: `${480 + index * 40}ms` }}
+                  >
                     <Link
                       href={`/dashboard/employees/${encodeURIComponent(row.matricule)}`}
                       className="group block rounded-xl px-2 py-1.5 hover:bg-muted/50"
@@ -177,10 +194,17 @@ export function CompletenessSection({ data }: { data: CompletenessOverview }) {
                         </span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-muted/70">
+                        <div className="h-2.5 flex-1 overflow-hidden rounded-full border border-black/5 bg-rose-100">
                           <div
-                            className="h-full rounded-full bg-gradient-to-r from-rose-500 to-orange-300 transition-[width] duration-700 ease-out"
-                            style={{ width: drawn ? `${(row.missingCount / max) * 100}%` : "0%" }}
+                            className="report-meter-fill h-full rounded-full"
+                            style={{
+                              width: drawn ? `${(row.missingCount / max) * 100}%` : "0%",
+                              transitionDelay: `${index * 55}ms`,
+                              backgroundImage: [
+                                "linear-gradient(110deg, transparent 25%, rgba(255,255,255,0.4) 50%, transparent 75%)",
+                                "linear-gradient(90deg, #f43f5e 0%, #e11d48 45%, #a855f7 100%)",
+                              ].join(", "),
+                            }}
                           />
                         </div>
                         <span className="w-24 shrink-0 truncate text-right text-[11px] text-muted-foreground">

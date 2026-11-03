@@ -74,6 +74,8 @@ export const driveSyncWebhookSchema = z
     employeeInformation: z.array(driveSyncEmployeeInformationSchema).max(MAX_EMPLOYEES_PER_CALL).optional(),
     /** Matricule folders still present on Drive. Sent on the final chunk. */
     driveMatricules: z.array(z.string().min(1).max(64)).max(MAX_EMPLOYEES_PER_CALL).optional(),
+    /** Utilisateur portail ayant déclenché la synchro (premier chunk uniquement). */
+    triggeredByUserId: z.string().min(1).max(64).optional(),
     /** @deprecated kept for older Apps Script copies — ignored if employeeInformation is present */
     completenessRules: z.array(z.record(z.string(), z.unknown())).max(2000).optional(),
   })

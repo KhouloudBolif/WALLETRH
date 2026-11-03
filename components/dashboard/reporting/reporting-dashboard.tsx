@@ -13,7 +13,7 @@ type ReportingDashboardProps = {
 export function ReportingDashboard({ workforce, directions, completeness }: ReportingDashboardProps) {
   return (
     <div className="space-y-8">
-      <header>
+      <header className="report-enter">
         <span className="mb-3 block h-0.5 w-8 rounded-full bg-primary" aria-hidden />
         <h1 className="font-serif text-3xl font-medium tracking-tight sm:text-4xl">
           Rapports

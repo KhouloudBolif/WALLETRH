@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CloudOff, FileStack, Shield, Users } from "lucide-react";
+import { CloudOff, Download, FileStack, Shield, Users } from "lucide-react";
 import { FeatureCard } from "@/components/layout/feature-card";
 import { StatChip, StatRow } from "@/components/layout/stat-chip";
 import { Panel, PanelHeader } from "@/components/ui/panel";
@@ -34,10 +34,16 @@ export async function AdminOverviewStats() {
 export function AdminQuickLinks() {
   const links = [
     {
-      href: "/admin/sync",
+      href: "/dashboard/synchronisation",
       icon: CloudOff,
       title: "Synchronisation",
       description: "Historique des synchronisations Drive",
+    },
+    {
+      href: "/dashboard/historique-telechargements",
+      icon: Download,
+      title: "Historique téléchargement",
+      description: "Dossiers ZIP téléchargés via les requêtes",
     },
     {
       href: "/admin/permissions",
@@ -60,7 +66,7 @@ export function AdminQuickLinks() {
   ];
 
   return (
-    <div className="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
       {links.map((link) => (
         <FeatureCard key={link.href} {...link} />
       ))}
@@ -87,7 +93,7 @@ export async function AdminRecentActivity() {
         <ActivityMetric label="Supprimés" value={`−${lastLog?.filesRemoved ?? 0}`} />
       </dl>
       <Link
-        href="/admin/sync"
+        href="/dashboard/synchronisation"
         className="mt-3 inline-block text-xs font-medium text-muted-foreground hover:text-foreground hover:underline"
       >
         Voir l&apos;historique →

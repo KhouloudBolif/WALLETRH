@@ -64,7 +64,7 @@ export function syncFailureAlertHtml(options: {
   </table>
   <p style="font-size: 13px; color: #666; margin-bottom: 4px;">Message d'erreur :</p>
   <pre style="background: #f5f5f5; border-radius: 8px; padding: 12px; font-size: 12px; white-space: pre-wrap; word-break: break-word;">${escapeHtml(options.errorMessage)}</pre>
-  <p style="font-size: 13px; color: #666;">Consultez l'historique complet depuis <strong>Administration &gt; Synchronisation</strong> sur le portail.</p>
+  <p style="font-size: 13px; color: #666;">Consultez l'historique complet depuis <strong>Synchronisation</strong> sur le portail.</p>
 </body>
 </html>
   `.trim();

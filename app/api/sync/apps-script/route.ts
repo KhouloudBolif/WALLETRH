@@ -54,11 +54,19 @@ export async function POST(request: Request) {
     );
   }
 
-  const { syncLogId: incomingSyncLogId, isFinal, employees, files, employeeInformation, driveMatricules } =
-    parsed.data;
+  const {
+    syncLogId: incomingSyncLogId,
+    isFinal,
+    employees,
+    files,
+    employeeInformation,
+    driveMatricules,
+    triggeredByUserId,
+  } = parsed.data;
 
   try {
-    const syncLogId = incomingSyncLogId ?? (await startSyncRun(SOURCE)).id;
+    const syncLogId =
+      incomingSyncLogId ?? (await startSyncRun(SOURCE, triggeredByUserId)).id;
 
     const result = await reconcileDriveIndex(
       syncLogId,

@@ -21,17 +21,40 @@ function sanitizeSegment(segment: string): string {
 
 export type ZipManifestItem = {
   fileId: string;
-  /** Full path inside the zip, e.g. "100001 - Youssef El Amrani/2- Etat Civil/100001_CIN.pdf" */
+  /** Chemin dans le ZIP. Racine si une seule catégorie, sinon « 2- Etat Civil/fichier.pdf ». */
   path: string;
 };
 
+function uniqueZipPath(path: string, used: Set<string>): string {
+  if (!used.has(path)) {
+    used.add(path);
+    return path;
+  }
+  const slash = path.lastIndexOf("/");
+  const dir = slash >= 0 ? path.slice(0, slash + 1) : "";
+  const file = slash >= 0 ? path.slice(slash + 1) : path;
+  const dot = file.lastIndexOf(".");
+  const stem = dot > 0 ? file.slice(0, dot) : file;
+  const ext = dot > 0 ? file.slice(dot) : "";
+  let n = 2;
+  let next = `${dir}${stem} (${n})${ext}`;
+  while (used.has(next)) {
+    n += 1;
+    next = `${dir}${stem} (${n})${ext}`;
+  }
+  used.add(next);
+  return next;
+}
+
 /** Builds the { fileId, path } list sent to the Apps Script zip bridge, skipping
- * any row we can't resolve a real Drive file ID for (local-only / malformed link). */
+ * any row we can't resolve a real Drive file ID for (local-only / malformed link).
+ * Les fichiers sont à la racine du ZIP. S'il y a plusieurs dossiers mères
+ * (catégories), chacun a son dossier, sans sous-dossier par employé. */
 export function buildZipManifest(rows: DocumentExportRow[]): {
   items: ZipManifestItem[];
   skipped: number;
 } {
-  const items: ZipManifestItem[] = [];
+  const pending: { fileId: string; folder: string; fileName: string }[] = [];
   let skipped = 0;
 
   for (const row of rows) {
@@ -41,12 +64,20 @@ export function buildZipManifest(rows: DocumentExportRow[]): {
       continue;
     }
 
-    const employeeFolder = sanitizeSegment(`${row.matricule} - ${row.displayName}`);
-    const categoryFolder = sanitizeSegment(categoryFilterLabels[row.category]);
+    const folder = sanitizeSegment(row.folderName || categoryFilterLabels[row.category]);
     const fileName = sanitizeSegment(row.fileName);
-
-    items.push({ fileId, path: `${employeeFolder}/${categoryFolder}/${fileName}` });
+    pending.push({ fileId, folder, fileName });
   }
+
+  const separateFolders = new Set(pending.map((item) => item.folder)).size > 1;
+  const used = new Set<string>();
+  const items = pending.map((item) => ({
+    fileId: item.fileId,
+    path: uniqueZipPath(
+      separateFolders ? `${item.folder}/${item.fileName}` : item.fileName,
+      used,
+    ),
+  }));
 
   return { items, skipped };
 }

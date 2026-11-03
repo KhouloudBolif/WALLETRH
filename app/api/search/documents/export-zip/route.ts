@@ -2,6 +2,7 @@ export const runtime = "nodejs";
 
 import { NextResponse } from "next/server";
 import { requireSession } from "@/lib/auth/require-admin";
+import { countUniqueMatricules, logDownload } from "@/lib/downloads/log-download";
 import { getResolvedAccessForUser } from "@/lib/permissions/access-rules";
 import { searchDocumentsForExport } from "@/lib/search/documents";
 import { encryptZipWithPassword } from "@/lib/search/encrypt-zip";
@@ -182,6 +183,19 @@ export async function POST(request: Request) {
     }
 
     const filename = `export-documents-${new Date().toISOString().slice(0, 10)}.zip`;
+    const sourceParam = url.searchParams.get("source");
+    const source = sourceParam === "recherche" ? "recherche" : "requete";
+    const employeeCount = countUniqueMatricules(rows.map((row) => row.matricule));
+
+    await logDownload({
+      userId: session.user.id,
+      filename,
+      kind: "ZIP",
+      source,
+      fileCount: items.length,
+      employeeCount,
+      summary: `${employeeCount} salarié(s) · ${items.length} fichier(s)`,
+    });
 
     return new NextResponse(zipBuffer as unknown as BodyInit, {
       headers: {

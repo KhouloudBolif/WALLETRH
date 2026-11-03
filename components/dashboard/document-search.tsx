@@ -208,7 +208,7 @@ export function DocumentSearch({
 
     try {
       const prepareResponse = await fetch(
-        `/api/search/documents/export-zip-prepare?${params}`,
+        `/api/search/documents/export-zip-prepare?${params}&source=recherche`,
       );
       const prepareData = await prepareResponse.json().catch(() => null);
       if (!prepareResponse.ok || !prepareData?.url || !prepareData?.envelope) {
@@ -291,7 +291,7 @@ export function DocumentSearch({
         <Panel>
           <p className="text-sm text-muted-foreground">
             L&apos;index est vide. Un administrateur doit lancer la synchronisation
-            depuis <span className="font-medium text-foreground">Admin → Synchronisation</span>.
+            depuis <span className="font-medium text-foreground">Synchronisation</span>.
           </p>
         </Panel>
       )}

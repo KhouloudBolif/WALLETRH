@@ -10,6 +10,7 @@ import {
   MousePointerClick,
   Plus,
   Search,
+  SlidersHorizontal,
   Trash2,
   X,
 } from "lucide-react";
@@ -46,6 +47,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { SavedQueriesBar } from "@/components/dashboard/saved-queries-bar";
 import { FilterField } from "@/components/dashboard/search-filters/filter-field";
 import { DateRangeFilterControl } from "@/components/dashboard/search-filters/dates-filters";
 import { FilterSelect, MultiFilterSelect } from "@/components/dashboard/search-filters/filter-select";
@@ -558,7 +560,7 @@ export function QueryBuilder({
       });
 
       const prepareResponse = await fetch(
-        `/api/search/documents/export-zip-prepare?${exportParams}`,
+        `/api/search/documents/export-zip-prepare?${exportParams}&source=requete`,
       );
       const prepareData = await prepareResponse.json().catch(() => null);
       if (!prepareResponse.ok || !prepareData?.url || !prepareData?.envelope) {
@@ -626,7 +628,7 @@ export function QueryBuilder({
 
   return (
     <div className="flex flex-col gap-4">
-      <header className="flex shrink-0 flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <header className="flex shrink-0 flex-col gap-4">
         <div className="min-w-0">
           <span className="mb-2 block h-0.5 w-8 rounded-full bg-primary" aria-hidden />
           <h1 className="font-serif text-3xl font-medium tracking-tight">
@@ -636,23 +638,41 @@ export function QueryBuilder({
             {userName} · {roleLabels[userRole]}. Cliquez un champ pour filtrer, ou glissez-le vers Excel.
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-border/80 bg-card px-3 py-1.5 text-xs shadow-elevation-xs">
-            <span className="font-semibold tabular-nums text-foreground">{exportColumns.length}</span>
-            <span className="text-muted-foreground">colonnes</span>
-          </span>
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-border/80 bg-card px-3 py-1.5 text-xs shadow-elevation-xs">
-            <span className="font-semibold tabular-nums text-foreground">{activeFields.length}</span>
-            <span className="text-muted-foreground">filtres</span>
-          </span>
-          <Button
-            onClick={handleLaunch}
-            disabled={launching}
-            className="h-10 rounded-full px-5"
-          >
-            {launching ? <Loader2 className="size-4 animate-spin" /> : <Search className="size-4" />}
-            Lancer la requête
-          </Button>
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <div className="inline-flex h-10 w-fit items-center rounded-full border border-border/80 bg-card px-1.5 shadow-elevation-xs">
+            <span className="inline-flex items-center gap-1.5 px-2.5 text-xs">
+              <Columns3 className="size-3.5 text-primary" />
+              <span className="font-semibold tabular-nums text-foreground">{exportColumns.length}</span>
+              <span className="text-muted-foreground">colonnes</span>
+            </span>
+            <span className="h-4 w-px bg-border" aria-hidden />
+            <span className="inline-flex items-center gap-1.5 px-2.5 text-xs">
+              <SlidersHorizontal className="size-3.5 text-gold-ink" />
+              <span className="font-semibold tabular-nums text-foreground">{activeFields.length}</span>
+              <span className="text-muted-foreground">filtres</span>
+            </span>
+          </div>
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+            <SavedQueriesBar
+              snapshot={{ filters: state, activeFields, exportColumns }}
+              onApply={(saved) => {
+                dispatch({ type: "replace", payload: saved.filters });
+                setActiveFields(saved.activeFields);
+                setExportColumns(saved.exportColumns);
+                toast.success("Requête chargée", {
+                  description: `« ${saved.name} » : les filtres et les colonnes sont de retour.`,
+                });
+              }}
+            />
+            <Button
+              onClick={handleLaunch}
+              disabled={launching}
+              className="h-10 rounded-full px-5 shadow-elevation-sm sm:ml-1"
+            >
+              {launching ? <Loader2 className="size-4 animate-spin" /> : <Search className="size-4" />}
+              Lancer la requête
+            </Button>
+          </div>
         </div>
       </header>
 

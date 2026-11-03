@@ -30,6 +30,7 @@ export async function GET() {
       isActive: true,
       passwordOrigin: true,
       adminVisiblePassword: true,
+      lastLoginAt: true,
       createdAt: true,
     },
   });

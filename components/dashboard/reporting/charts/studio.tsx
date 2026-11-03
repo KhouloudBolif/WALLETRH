@@ -6,28 +6,28 @@ import { cn } from "@/lib/utils";
 
 const TONE = {
   violet: {
-    bar: "from-primary to-primary/50",
+    bar: "linear-gradient(90deg, #7c3aed 0%, #a78bfa 55%, #c4b5fd 100%)",
     text: "text-primary",
     chip: "bg-accent text-primary",
     edge: "from-primary to-primary/40",
     ring: "var(--brand-accent)",
   },
   cyan: {
-    bar: "from-gold-ink to-gold",
+    bar: "linear-gradient(90deg, #0891b2 0%, #38bdf8 55%, #f0b429 100%)",
     text: "text-gold-ink",
     chip: "bg-[oklch(0.95_0.03_82)] text-gold-ink",
     edge: "from-gold-ink to-gold",
     ring: "var(--brand-gold-ink)",
   },
   teal: {
-    bar: "from-teal-600 to-teal-300",
+    bar: "linear-gradient(90deg, #0f766e 0%, #14b8a6 55%, #5eead4 100%)",
     text: "text-teal-700",
     chip: "bg-teal-100 text-teal-700",
     edge: "from-teal-600 to-teal-300",
     ring: "#0f766e",
   },
   rose: {
-    bar: "from-rose-500 to-orange-300",
+    bar: "linear-gradient(90deg, #e11d48 0%, #f97316 55%, #fbbf24 100%)",
     text: "text-rose-700",
     chip: "bg-rose-100 text-rose-700",
     edge: "from-rose-500 to-orange-300",
@@ -43,19 +43,22 @@ export function StudioCard({
   children,
   className,
   action,
+  delayMs = 0,
 }: {
   title: string;
   description?: string;
   children: ReactNode;
   className?: string;
   action?: ReactNode;
+  delayMs?: number;
 }) {
   return (
     <section
       className={cn(
-        "rounded-2xl border border-border/80 bg-card p-4 shadow-elevation-xs sm:p-5",
+        "report-enter rounded-2xl border border-border/80 bg-card p-4 shadow-elevation-xs sm:p-5",
         className,
       )}
+      style={{ animationDelay: `${delayMs}ms` }}
     >
       <div className="flex items-start justify-between gap-3">
         <div>
@@ -75,16 +78,21 @@ export function KpiCard({
   hint,
   tone,
   icon: Icon,
+  delayMs = 0,
 }: {
   label: string;
   value: string;
   hint?: string;
   tone: StudioTone;
   icon: LucideIcon;
+  delayMs?: number;
 }) {
   const toneClass = TONE[tone];
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-border/80 bg-card px-4 py-3 shadow-elevation-xs">
+    <div
+      className="report-enter relative overflow-hidden rounded-2xl border border-border/80 bg-card px-4 py-3 shadow-elevation-xs"
+      style={{ animationDelay: `${delayMs}ms` }}
+    >
       <span className={cn("absolute inset-y-0 left-0 w-1 bg-gradient-to-b", toneClass.edge)} aria-hidden />
       <div className="flex items-start justify-between gap-2 pl-2">
         <div>
@@ -113,9 +121,12 @@ export function ScoreRing({
 }) {
   const [drawn, setDrawn] = useState(false);
   useEffect(() => {
-    const id = requestAnimationFrame(() => setDrawn(true));
+    setDrawn(false);
+    const id = requestAnimationFrame(() => {
+      requestAnimationFrame(() => setDrawn(true));
+    });
     return () => cancelAnimationFrame(id);
-  }, []);
+  }, [ratio]);
 
   const clamped = Math.min(Math.max(ratio, 0), 1);
   const percent = Math.round(clamped * 100);
@@ -125,7 +136,7 @@ export function ScoreRing({
 
   return (
     <div className="flex items-center gap-4">
-      <div className="relative size-28 shrink-0">
+      <div className="report-donut-enter relative size-28 shrink-0">
         <svg viewBox="0 0 120 120" className="size-full" role="img" aria-label={`${label} ${percent} %`}>
           <circle cx="60" cy="60" r={radius} fill="none" stroke="currentColor" className="text-muted/70" strokeWidth="10" />
           <circle
@@ -139,7 +150,7 @@ export function ScoreRing({
             strokeDasharray={circumference}
             strokeDashoffset={offset}
             transform="rotate(-90 60 60)"
-            className="transition-[stroke-dashoffset] duration-700 ease-out"
+            className="transition-[stroke-dashoffset] duration-1000 ease-out"
           />
         </svg>
         <div className="absolute inset-0 grid place-items-center">
@@ -172,8 +183,18 @@ export function ShareDonut({
   emptyLabel: string;
 }) {
   const [active, setActive] = useState<string | null>(null);
+  const [drawn, setDrawn] = useState(false);
   const total = slices.reduce((sum, slice) => sum + slice.value, 0);
   const current = slices.find((slice) => slice.label === active) ?? null;
+  const slicesKey = slices.map((s) => `${s.label}:${s.value}`).join("|");
+
+  useEffect(() => {
+    setDrawn(false);
+    const id = requestAnimationFrame(() => {
+      requestAnimationFrame(() => setDrawn(true));
+    });
+    return () => cancelAnimationFrame(id);
+  }, [slicesKey]);
 
   let cursor = 0;
   const stops =
@@ -190,7 +211,10 @@ export function ShareDonut({
   return (
     <div className="flex flex-col items-center gap-5 sm:flex-row sm:items-center">
       <div
-        className="relative size-40 shrink-0 rounded-full"
+        className={cn(
+          "report-donut-enter relative size-40 shrink-0 rounded-full shadow-[0_0_0_8px_rgba(124,58,237,0.06)]",
+          drawn ? "opacity-100" : "opacity-0",
+        )}
         style={{ background: `conic-gradient(${stops})` }}
         role="img"
         aria-label={
@@ -199,7 +223,7 @@ export function ShareDonut({
             : slices.map((slice) => `${slice.label} ${Math.round((slice.value / total) * 100)} %`).join(", ")
         }
       >
-        <div className="absolute inset-[18%] flex flex-col items-center justify-center rounded-full bg-white text-center">
+        <div className="absolute inset-[18%] flex flex-col items-center justify-center rounded-full bg-white text-center shadow-inner">
           <span className="text-2xl font-semibold tabular-nums text-foreground">
             {current ? current.value : total}
           </span>
@@ -209,11 +233,15 @@ export function ShareDonut({
         </div>
       </div>
       <ul className="w-full space-y-2">
-        {slices.map((slice) => {
+        {slices.map((slice, index) => {
           const share = total > 0 ? Math.round((slice.value / total) * 100) : 0;
           const selected = active === slice.label;
           return (
-            <li key={slice.label}>
+            <li
+              key={slice.label}
+              className="report-enter"
+              style={{ animationDelay: `${120 + index * 70}ms` }}
+            >
               <button
                 type="button"
                 onMouseEnter={() => setActive(slice.label)}
@@ -225,7 +253,11 @@ export function ShareDonut({
                   selected ? "bg-muted/70" : "hover:bg-muted/40",
                 )}
               >
-                <span className="size-2.5 shrink-0 rounded-full" style={{ backgroundColor: slice.color }} aria-hidden />
+                <span
+                  className="size-2.5 shrink-0 rounded-full ring-2 ring-white"
+                  style={{ backgroundColor: slice.color }}
+                  aria-hidden
+                />
                 <span className="min-w-0 flex-1 truncate text-sm text-foreground">{slice.label}</span>
                 <span className="text-xs tabular-nums text-muted-foreground">
                   {slice.value} · {share}%
@@ -253,44 +285,70 @@ export function MeterList({
   onRowClick?: (key: string) => void;
 }) {
   const [drawn, setDrawn] = useState(false);
+  const rowsKey = rows.map((r) => `${r.key}:${r.value}`).join("|");
+
   useEffect(() => {
-    const id = requestAnimationFrame(() => setDrawn(true));
+    setDrawn(false);
+    const id = requestAnimationFrame(() => {
+      requestAnimationFrame(() => setDrawn(true));
+    });
     return () => cancelAnimationFrame(id);
-  }, []);
+  }, [rowsKey]);
 
   const max = Math.max(...rows.map((row) => row.value), 1);
 
   return (
     <ul className="space-y-3">
-      {rows.map((row) => {
+      {rows.map((row, index) => {
         const width = scale === "percent" ? Math.min(row.value, 100) : (row.value / max) * 100;
-        const barClass =
+        const fill =
           tone === "status"
             ? row.value >= 80
-              ? "bg-(--status-good)"
+              ? "linear-gradient(90deg, #10b981 0%, #34d399 55%, #a3e635 100%)"
               : row.value >= 50
-                ? "bg-(--status-watch)"
-                : "bg-(--status-critical)"
-            : cn("bg-gradient-to-r", TONE[tone].bar);
+                ? "linear-gradient(90deg, #fbbf24 0%, #f97316 55%, #ef4444 100%)"
+                : "linear-gradient(90deg, #f43f5e 0%, #e11d48 45%, #a855f7 100%)"
+            : TONE[tone].bar;
+
+        const track =
+          tone === "status"
+            ? row.value >= 80
+              ? "bg-emerald-100"
+              : row.value >= 50
+                ? "bg-amber-100"
+                : "bg-rose-100"
+            : "bg-muted/70";
+
         const rowBody = (
           <>
-            <div className="mb-1 flex items-baseline justify-between gap-3">
+            <div className="mb-1.5 flex items-baseline justify-between gap-3">
               <span className="min-w-0 truncate text-xs font-medium text-foreground">{row.label}</span>
               <span className="shrink-0 text-xs tabular-nums text-muted-foreground">
                 {formatValue ? formatValue(row.value) : row.value}
                 {row.detail ? <span className="ml-1.5 text-muted-foreground/80">{row.detail}</span> : null}
               </span>
             </div>
-            <div className="h-2 overflow-hidden rounded-full bg-muted/70">
+            <div className={cn("h-2.5 overflow-hidden rounded-full border border-black/5", track)}>
               <div
-                className={cn("h-full rounded-full transition-[width] duration-700 ease-out", barClass)}
-                style={{ width: drawn ? `${width}%` : "0%" }}
+                className="report-meter-fill h-full rounded-full"
+                style={{
+                  width: drawn ? `${Math.max(width, 0)}%` : "0%",
+                  transitionDelay: `${index * 55}ms`,
+                  backgroundImage: [
+                    "linear-gradient(110deg, transparent 25%, rgba(255,255,255,0.4) 50%, transparent 75%)",
+                    fill,
+                  ].join(", "),
+                }}
               />
             </div>
           </>
         );
         return (
-          <li key={row.key}>
+          <li
+            key={row.key}
+            className="report-enter"
+            style={{ animationDelay: `${80 + index * 45}ms` }}
+          >
             {onRowClick && row.interactive !== false ? (
               <button
                 type="button"
@@ -306,5 +364,50 @@ export function MeterList({
         );
       })}
     </ul>
+  );
+}
+
+/** Barre horizontale partagée (ex. Encadrement). */
+export function SplitProgressBar({
+  leftPercent,
+  leftLabel,
+  rightLabel,
+  tone = "violet",
+}: {
+  leftPercent: number;
+  leftLabel: string;
+  rightLabel: string;
+  tone?: StudioTone;
+}) {
+  const [drawn, setDrawn] = useState(false);
+  useEffect(() => {
+    setDrawn(false);
+    const id = requestAnimationFrame(() => {
+      requestAnimationFrame(() => setDrawn(true));
+    });
+    return () => cancelAnimationFrame(id);
+  }, [leftPercent]);
+
+  const clamped = Math.min(Math.max(leftPercent, 0), 100);
+
+  return (
+    <div>
+      <div className="mb-1.5 flex justify-between text-[11px] text-muted-foreground">
+        <span>{leftLabel}</span>
+        <span>{rightLabel}</span>
+      </div>
+      <div className="flex h-3.5 overflow-hidden rounded-full border border-black/5 bg-slate-200/80">
+        <div
+          className="report-meter-fill h-full rounded-full"
+          style={{
+            width: drawn ? `${clamped}%` : "0%",
+            backgroundImage: [
+              "linear-gradient(110deg, transparent 25%, rgba(255,255,255,0.45) 50%, transparent 75%)",
+              TONE[tone].bar,
+            ].join(", "),
+          }}
+        />
+      </div>
+    </div>
   );
 }

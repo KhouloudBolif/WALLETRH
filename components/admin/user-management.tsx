@@ -45,7 +45,19 @@ type AdminUser = {
   passwordOrigin: "ADMIN" | "FORGOT_PASSWORD" | "USER";
   canViewPassword: boolean;
   viewablePassword: string | null;
+  lastLoginAt: string | null;
 };
+
+function formatLastLogin(iso: string | null) {
+  if (!iso) return "Jamais";
+  return new Intl.DateTimeFormat("fr-FR", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(new Date(iso));
+}
 
 const createFormSchema = createUserSchema;
 type CreateForm = z.infer<typeof createFormSchema>;
@@ -229,12 +241,13 @@ export function UserManagement() {
               <TableHead>Email</TableHead>
               <TableHead>Rôle</TableHead>
               <TableHead>Mot de passe</TableHead>
+              <TableHead>Dernier login</TableHead>
               <TableHead>Statut</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableSkeletonRows rows={5} columns={6} />
+            <TableSkeletonRows rows={5} columns={7} />
           </TableBody>
         </Table>
       ) : users.length === 0 ? (
@@ -249,6 +262,7 @@ export function UserManagement() {
               <TableHead>Email</TableHead>
               <TableHead>Rôle</TableHead>
               <TableHead>Mot de passe</TableHead>
+              <TableHead>Dernier login</TableHead>
               <TableHead>Statut</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
@@ -294,6 +308,9 @@ export function UserManagement() {
                       Privé ({originLabels[user.passwordOrigin]})
                     </span>
                   )}
+                </TableCell>
+                <TableCell className="whitespace-nowrap text-xs text-muted-foreground">
+                  {formatLastLogin(user.lastLoginAt)}
                 </TableCell>
                 <TableCell>
                   <Badge variant={user.isActive ? "default" : "outline"}>

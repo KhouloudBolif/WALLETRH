@@ -4,7 +4,15 @@ import { useState } from "react";
 import { Baby, Heart, ShieldCheck, Users } from "lucide-react";
 import { FilterSelect } from "@/components/dashboard/search-filters/filter-select";
 import type { DirectionWorkforce, WorkforceDemographics } from "@/lib/reporting/stats";
-import { genderColor, KpiCard, MeterList, ScoreRing, ShareDonut, StudioCard } from "./charts/studio";
+import {
+  genderColor,
+  KpiCard,
+  MeterList,
+  ScoreRing,
+  ShareDonut,
+  SplitProgressBar,
+  StudioCard,
+} from "./charts/studio";
 
 const ALL_DIRECTIONS = "all";
 
@@ -69,6 +77,7 @@ export function WorkforceSection({
           hint={scopeLabel}
           tone="violet"
           icon={Users}
+          delayMs={40}
         />
         <KpiCard
           label="Âge moyen"
@@ -76,6 +85,7 @@ export function WorkforceSection({
           hint={data.averageAge === null ? "Âge non renseigné" : "Années"}
           tone="rose"
           icon={Heart}
+          delayMs={90}
         />
         <KpiCard
           label="Ancienneté moyenne"
@@ -83,6 +93,7 @@ export function WorkforceSection({
           hint="Depuis l'entrée"
           tone="cyan"
           icon={ShieldCheck}
+          delayMs={140}
         />
         <KpiCard
           label="Conjoint au dossier"
@@ -94,6 +105,7 @@ export function WorkforceSection({
           }
           tone="teal"
           icon={Baby}
+          delayMs={190}
         />
       </div>
 
@@ -102,6 +114,7 @@ export function WorkforceSection({
           className="lg:col-span-3"
           title="Répartition par genre"
           description="Survolez une ligne pour isoler la part dans l'anneau."
+          delayMs={220}
         >
           <ShareDonut
             emptyLabel="Salariés"
@@ -117,6 +130,7 @@ export function WorkforceSection({
           className="lg:col-span-2"
           title="Encadrement"
           description="Part de l'effectif qui anime une équipe."
+          delayMs={280}
         >
           <ScoreRing
             ratio={data.managerRatio}
@@ -129,20 +143,18 @@ export function WorkforceSection({
             }
           />
           <div className="mt-5">
-            <div className="mb-1.5 flex justify-between text-[11px] text-muted-foreground">
-              <span>Encadrent · {managerPercent}%</span>
-              <span>Sans équipe · {100 - managerPercent}%</span>
-            </div>
-            <div className="flex h-2.5 overflow-hidden rounded-full bg-muted/70">
-              <div className="h-full bg-primary" style={{ width: `${managerPercent}%` }} />
-              <div className="h-full bg-slate-300" style={{ width: `${100 - managerPercent}%` }} />
-            </div>
+            <SplitProgressBar
+              leftPercent={managerPercent}
+              leftLabel={`Encadrent · ${managerPercent}%`}
+              rightLabel={`Sans équipe · ${100 - managerPercent}%`}
+              tone="violet"
+            />
           </div>
         </StudioCard>
       </div>
 
       <div key={`mix-${direction}`} className="grid gap-4 lg:grid-cols-3">
-        <StudioCard title="Répartition par âge">
+        <StudioCard title="Répartition par âge" delayMs={320}>
           <MeterList
             tone="cyan"
             rows={data.ageDistribution.map((row) => ({
@@ -154,7 +166,7 @@ export function WorkforceSection({
             formatValue={(value) => String(value)}
           />
         </StudioCard>
-        <StudioCard title="Répartition par ancienneté">
+        <StudioCard title="Répartition par ancienneté" delayMs={370}>
           <MeterList
             tone="violet"
             rows={data.seniorityDistribution.map((row) => ({
@@ -169,6 +181,7 @@ export function WorkforceSection({
         <StudioCard
           title="Répartition par nombre d'enfants"
           description="Nombre déclaré dans la feuille Complétude des dossiers."
+          delayMs={420}
         >
           <MeterList
             tone="teal"

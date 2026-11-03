@@ -128,12 +128,17 @@ export const initialFiltersState: FiltersState = {
   dateDepartMode: "interval",
 };
 
-export type FiltersAction = { type: "patch"; payload: Partial<FiltersState> } | { type: "reset" };
+export type FiltersAction =
+  | { type: "patch"; payload: Partial<FiltersState> }
+  | { type: "replace"; payload: FiltersState }
+  | { type: "reset" };
 
 export function filtersReducer(state: FiltersState, action: FiltersAction): FiltersState {
   switch (action.type) {
     case "patch":
       return { ...state, ...action.payload };
+    case "replace":
+      return { ...initialFiltersState, ...action.payload };
     case "reset":
       return initialFiltersState;
   }

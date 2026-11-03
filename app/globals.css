@@ -243,6 +243,78 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
+  /* Complétude stats — barres animées / colorées */
+  .coverage-bar-fill {
+    width: 0;
+    background-size: 220% 100%, 100% 100%;
+    animation:
+      coverage-bar-grow 900ms cubic-bezier(0.22, 1, 0.36, 1) forwards,
+      coverage-bar-shimmer 2.2s linear infinite;
+  }
+  .coverage-stat-row {
+    animation: portal-enter-fade 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .coverage-bar-fill,
+    .coverage-stat-row {
+      animation: none;
+    }
+    .coverage-bar-fill {
+      width: var(--coverage-target, 0%);
+    }
+  }
+  @keyframes coverage-bar-grow {
+    from { width: 0; }
+    to { width: var(--coverage-target, 0%); }
+  }
+  @keyframes coverage-bar-shimmer {
+    0% { background-position: 120% 0, 0 0; }
+    100% { background-position: -120% 0, 0 0; }
+  }
+
+  /* Synchronisation — barre d'avancement */
+  .sync-progress-fill {
+    background-size: 220% 100%, 100% 100%;
+    transition: width 600ms cubic-bezier(0.22, 1, 0.36, 1);
+    animation: coverage-bar-shimmer 2s linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sync-progress-fill {
+      animation: none;
+      transition: none;
+    }
+  }
+
+  /* Rapports — entrée + barres */
+  .report-enter {
+    animation: portal-enter-fade 480ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .report-donut-enter {
+    animation: report-donut-pop 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .report-meter-fill {
+    background-size: 220% 100%, 100% 100%;
+    transition: width 800ms cubic-bezier(0.22, 1, 0.36, 1);
+    animation: coverage-bar-shimmer 2.4s linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .report-enter,
+    .report-donut-enter,
+    .report-meter-fill {
+      animation: none;
+    }
+  }
+  @keyframes report-donut-pop {
+    from {
+      opacity: 0;
+      transform: scale(0.72) rotate(-12deg);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) rotate(0deg);
+    }
+  }
+
   .dark .portal-canvas {
     background-image:
       radial-gradient(ellipse 55% 42% at 100% -8%, oklch(0.38 0.08 295 / 0.28), transparent 58%),

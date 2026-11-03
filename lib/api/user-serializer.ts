@@ -12,6 +12,7 @@ export type AdminUserRecord = {
   isActive: boolean;
   passwordOrigin: PasswordOrigin;
   adminVisiblePassword: string | null;
+  lastLoginAt: Date | null;
   createdAt: Date;
 };
 
@@ -29,6 +30,7 @@ export function serializeUserForAdmin(user: AdminUserRecord) {
     viewablePassword: viewable
       ? decryptVisiblePassword(user.adminVisiblePassword)
       : null,
+    lastLoginAt: user.lastLoginAt?.toISOString() ?? null,
     createdAt: user.createdAt.toISOString(),
   };
 }

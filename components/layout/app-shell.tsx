@@ -7,6 +7,7 @@ import {
   BarChart3,
   ChevronDown,
   ClipboardCheck,
+  Download,
   Home,
   ListFilter,
   LogOut,
@@ -71,14 +72,26 @@ const workspaceNav: NavItem[] = [
   },
 ];
 
-const adminNav: NavItem[] = [
+const syncNav: NavItem = {
+  href: "/dashboard/synchronisation",
+  label: "Synchronisation",
+  icon: RefreshCw,
+  match: (p) =>
+    p.startsWith("/dashboard/synchronisation") || p.startsWith("/admin/sync"),
+};
+
+const downloadHistoryNav: NavItem = {
+  href: "/dashboard/historique-telechargements",
+  label: "Historique téléchargement",
+  icon: Download,
+  match: (p) => p.startsWith("/dashboard/historique-telechargements"),
+};
+
+/** Sync + historique — visibles pour tous (sous-menu). */
+const sharedToolsNav: NavItem[] = [syncNav, downloadHistoryNav];
+
+const adminOnlyNav: NavItem[] = [
   { href: "/admin", label: "Vue d'ensemble", icon: Shield, match: (p) => p === "/admin" },
-  {
-    href: "/admin/sync",
-    label: "Synchronisation",
-    icon: RefreshCw,
-    match: (p) => p.startsWith("/admin/sync"),
-  },
   {
     href: "/admin/permissions",
     label: "Permissions",
@@ -91,6 +104,15 @@ const adminNav: NavItem[] = [
     icon: UserCog,
     match: (p) => p.startsWith("/admin/users"),
   },
+];
+
+/** Admin : outils partagés + écrans admin, dans le même sous-menu. */
+const adminNav: NavItem[] = [
+  adminOnlyNav[0]!,
+  syncNav,
+  downloadHistoryNav,
+  adminOnlyNav[1]!,
+  adminOnlyNav[2]!,
 ];
 
 type AppShellProps = {
@@ -158,8 +180,9 @@ function Header({ name, role }: { name: string; role: Role }) {
 
 function PortalNav({ role }: { role: Role }) {
   const pathname = usePathname();
-  const showAdmin = role === "ADMIN";
-  const adminActive = adminNav.some((item) => item.match(pathname));
+  const isAdmin = role === "ADMIN";
+  const menuItems = isAdmin ? adminNav : sharedToolsNav;
+  const menuActive = menuItems.some((item) => item.match(pathname));
 
   return (
     <nav className="border-b border-border/70 bg-muted/30" aria-label="Navigation principale">
@@ -168,41 +191,37 @@ function PortalNav({ role }: { role: Role }) {
           <NavPill key={item.href} item={item} pathname={pathname} />
         ))}
 
-        {showAdmin && (
-          <>
-            <div className="mx-1 h-6 w-px shrink-0 bg-border" aria-hidden />
-            <Menu>
-              <MenuTrigger
-                className={cn(
-                  "group/admin-trigger flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors",
-                  adminActive
-                    ? "bg-primary/10 text-primary"
-                    : "text-muted-foreground hover:bg-background hover:text-foreground",
-                )}
-              >
-                <Shield className="size-4" />
-                Administration
-                <ChevronDown className="size-3.5 opacity-60 transition-transform duration-300 ease-out group-data-popup-open/admin-trigger:rotate-180" />
-              </MenuTrigger>
-              <MenuContent>
-                {adminNav.map((item) => {
-                  const active = item.match(pathname);
-                  const Icon = item.icon;
-                  return (
-                    <MenuLinkItem
-                      key={item.href}
-                      render={<Link href={item.href} />}
-                      className={active ? "bg-accent text-accent-foreground" : undefined}
-                    >
-                      <Icon className="size-4" />
-                      {item.label}
-                    </MenuLinkItem>
-                  );
-                })}
-              </MenuContent>
-            </Menu>
-          </>
-        )}
+        <div className="mx-1 h-6 w-px shrink-0 bg-border" aria-hidden />
+        <Menu>
+          <MenuTrigger
+            className={cn(
+              "group/admin-trigger flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors",
+              menuActive
+                ? "bg-primary/10 text-primary"
+                : "text-muted-foreground hover:bg-background hover:text-foreground",
+            )}
+          >
+            <Shield className="size-4" />
+            {isAdmin ? "Administration" : "Outils"}
+            <ChevronDown className="size-3.5 opacity-60 transition-transform duration-300 ease-out group-data-popup-open/admin-trigger:rotate-180" />
+          </MenuTrigger>
+          <MenuContent>
+            {menuItems.map((item) => {
+              const active = item.match(pathname);
+              const Icon = item.icon;
+              return (
+                <MenuLinkItem
+                  key={item.href}
+                  render={<Link href={item.href} />}
+                  className={active ? "bg-accent text-accent-foreground" : undefined}
+                >
+                  <Icon className="size-4" />
+                  {item.label}
+                </MenuLinkItem>
+              );
+            })}
+          </MenuContent>
+        </Menu>
       </div>
     </nav>
   );

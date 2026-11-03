@@ -15,11 +15,16 @@ model User {
   adminVisiblePassword String?
   role                 Role           @default(RH_AGENT)
   isActive             Boolean        @default(true)
+  /// Dernière connexion réussie au portail (null = jamais connecté).
+  lastLoginAt          DateTime?
   createdAt            DateTime       @default(now())
   updatedAt            DateTime       @updatedAt
   accessRules          AccessRule[]
   verifiedAttestations CompletenessAttestation[]
   employeeScope        EmployeeScope?
+  savedQueries         SavedQuery[]
+  downloadLogs         DownloadLog[]
+  syncLogsTriggered    SyncLog[]
 }
 
 enum PasswordOrigin {
@@ -118,8 +123,8 @@ model Employee {
   /// Full Base sheet row, label → value (display in dossier)
   metadata      Json?
   lastSyncedAt  DateTime?
-  /// Set when the matricule folder is absent from Drive at the end of a sync.
-  /// Cleared automatically if the folder comes back.
+  /// Set when the matricule is absent from the Base sheet at the end of a sync.
+  /// Cleared automatically if the row comes back.
   archivedAt    DateTime?
   files         DriveFile[]
   attestations  CompletenessAttestation[]
@@ -176,6 +181,14 @@ model SyncLog {
   /// Set once a failure-alert email has actually been sent for this run — throttles
   /// repeated alerts for the same underlying incident (see markSyncFailed()).
   alertSentAt      DateTime?
+  /// Matricules lus dans la feuille Base pendant ce run (chunk 1).
+  /// Le dernier chunk s'en sert pour archiver les absents.
+  baseMatricules   String[]   @default([])
+  /// Utilisateur portail qui a lancé la synchro (null = déclencheur planifié Apps Script).
+  triggeredById    String?
+  triggeredBy      User?      @relation(fields: [triggeredById], references: [id], onDelete: SetNull)
+
+  @@index([triggeredById])
 }
 
 /// Manual RH attestation of a dossier-completeness gap — distinct from the auto-derived
@@ -230,6 +243,43 @@ model EmployeeScope {
   allowedDirections String[]
   allowedServices   String[]
   updatedAt         DateTime @updatedAt
+}
+
+/// Requête de filtre enregistrée par un utilisateur (champs, valeurs, colonnes Excel).
+model SavedQuery {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name          String
+  filters       Json
+  activeFields  String[]
+  exportColumns String[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([userId, name])
+  @@index([userId])
+}
+
+/// Journal des téléchargements ZIP (dossiers) déclenchés depuis Requête / Recherche.
+/// ADMIN voit tout ; les autres rôles ne voient que leurs propres lignes.
+model DownloadLog {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt     DateTime @default(now())
+  filename      String
+  /// ZIP | EXCEL
+  kind          String   @default("ZIP")
+  /// requete | recherche
+  source        String   @default("requete")
+  fileCount     Int      @default(0)
+  employeeCount Int      @default(0)
+  /// Aperçu court des filtres (optionnel)
+  summary       String?
+
+  @@index([userId, createdAt])
+  @@index([createdAt])
 }
 
 model PasswordResetToken {

@@ -7,7 +7,6 @@ import {
   BookUser,
   CheckCircle2,
   ClipboardCheck,
-  CloudOff,
   FileSearch,
   Files,
   LayoutDashboard,
@@ -158,20 +157,16 @@ export async function DashboardHub({ userId, userName, userRole }: DashboardHubP
             <AlertCircle className="mt-0.5 size-4 shrink-0 text-(--status-watch)" />
             <p className="text-sm text-muted-foreground">
               L&apos;index documentaire est vide.{" "}
-              {userRole === "ADMIN" ? (
-                <>
-                  Lancez une synchronisation depuis{" "}
-                  <Link
-                    href="/admin/sync"
-                    className="font-medium text-foreground hover:underline"
-                  >
-                    Synchronisation
-                  </Link>
-                  .
-                </>
-              ) : (
-                "Contactez un administrateur pour lancer la synchronisation."
-              )}
+              <>
+                Lancez une synchronisation depuis{" "}
+                <Link
+                  href="/dashboard/synchronisation"
+                  className="font-medium text-foreground hover:underline"
+                >
+                  Synchronisation
+                </Link>
+                .
+              </>
             </p>
           </div>
         </Panel>
@@ -367,18 +362,12 @@ export async function DashboardHub({ userId, userName, userRole }: DashboardHubP
               Comptes portail, droits d&apos;accès et index Drive
             </p>
           </div>
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-5">
             <FeatureCard
               href="/admin"
               icon={LayoutDashboard}
               title="Vue d'ensemble"
               description="Statistiques et dernière synchronisation."
-            />
-            <FeatureCard
-              href="/admin/sync"
-              icon={CloudOff}
-              title="Synchronisation"
-              description="Historique des synchronisations Drive."
             />
             <FeatureCard
               href="/admin/permissions"

@@ -49,6 +49,12 @@ function doPost(e) {
   if (!raw) {
     return htmlMsg_("Envelope manquant.");
   }
+
+  // Bouton Synchroniser du portail — ce fichier ZIP-only ne contient pas runSync.
+  // Utilisez le projet sync.gs (Drive + Base) comme Web App, ou fusionnez les scripts.
+  var syncHint = trySyncTriggerHint_(raw);
+  if (syncHint) return syncHint;
+
   // JSON brut (serveur) → zipBase64 ; sinon page HTML téléchargement
   if (e.postData && e.postData.type && e.postData.type.indexOf("json") >= 0) {
     return runServerZip_(raw);
@@ -62,6 +68,23 @@ function doPost(e) {
     }
   }
   return runBrowserZip_(raw);
+}
+
+function trySyncTriggerHint_(raw) {
+  try {
+    var envelope = JSON.parse(raw);
+    if (!envelope || !envelope.payload) return null;
+    var body = JSON.parse(envelope.payload);
+    if (!body || body.action !== "runSync") return null;
+    return ContentService.createTextOutput(
+      JSON.stringify({
+        error:
+          "Ce projet Apps Script est ZIP-only. Pour Synchroniser depuis le portail, déployez scripts/apps-script/sync.gs en Web App (même URL dans APPS_SCRIPT_EXPORT_URL) — il contient runSync + l’export ZIP.",
+      }),
+    ).setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return null;
+  }
 }
 
 /** Appelé par la page relais. Renvoie le ZIP en base64 — pas de téléchargement Drive. */
